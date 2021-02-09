@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_caci_cisco_inter.Cisco_DAOScript</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>Cisco_DAOScript</name>
+        <script><![CDATA[var Cisco_DAOScript = Class.create();
+Cisco_DAOScript.prototype = {
+    initialize: function() {
+        this.logger = new Cisco_SNLogger();
+        this.updateAlarmService = new Cisco_UpdateAlarmService();
+
+        this.table = {
+            "processQueue": "x_caci_cisco_inter_inventory_queue",
+            "serverIntermediateDump": "x_caci_cisco_inter_cisco_server_intermediate_dump",
+            "alarmsDump": "x_caci_cisco_inter_cisco_alarms_dump",
+            "fiIntermediateDump": "x_caci_cisco_inter_cisco_fi_dump",
+            "HXIntermediateDump": "x_caci_cisco_inter_cisco_hx_dump",
+            "createIncident": "incident",
+            "ciscoServers": "x_caci_cisco_inter_cisco_servers",
+            "hyperflexClusters": "x_caci_cisco_inter_cisco_hyperflex_clusters",
+            "fabricInterconnects": "x_caci_cisco_inter_cisco_fibre_interconnects",
+            "relationship": "cmdb_rel_ci",
+            "alarms": "x_caci_cisco_inter_cisco_alarms",
+            "authentication": "x_caci_cisco_inter_intersight_authentication",
+            "configurationItem": "cmdb_ci",
+            "deviceRegistration": "x_caci_cisco_inter_cisco_deviceregistration"
+        };
+
+        this.property = {
+            "retPeriod": gs.getProperty('x_caci_cisco_inter.retention.period'),
+            "authRec": gs.getProperty('x_caci_cisco_inter.authentication.record.sysid') + '',
+            "HXRelationship": gs.getProperty('x_caci_cisco_inter.HX.relationship.sysid') + '',
+            "fiRelationship": gs.getProperty('x_caci_cisco_inter.fi.relationship.sysid') + '',
+            "incidentFilter": gs.getProperty('x_caci_cisco_inter.cisco_incident_filter') + ''
+
+        };
+    },
+
+    insertIntoQueue: function(topic, parameter, payload, intersight) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.insertIntoQueue performing insertion into queue.");
+
+            var gr = new GlideRecord(this.table.processQueue);
+            gr.initialize();
+            gr.topic = topic + '';
+            gr.parameter = parameter + '';
+            gr.payload = payload + '';
+            gr.state = "ready";
+            gr.intersight = intersight + '';
+            gr.insert();
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.insertIntoQueue while insert data into Queue table. Error :- " + e);
+        }
+    },
+
+    checkWhetherScheduleJobIsRunning: function() {
+        var gr = new GlideRecord("x_caci_cisco_inter_inventory_queue");
+        gr.addQuery("topic", "Start Alarms Import");
+        gr.addQuery("state", "processing");
+        gr.query();
+        if (!gr.next()) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    checkWhetherImportInventoryJobIsRunning: function() {
+        var gr = new GlideRecord("x_caci_cisco_inter_inventory_queue");
+        gr.addEncodedQuery("topicINStart Import,Start Inventory Import,Process Inventory Endpoint,Process Inventory Response^state=processing");
+        gr.query();
+        if (!gr.next()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    },
+    insertIntoIntermediateDump: function(tabelName, recordData) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.insertIntoIntermediateDump performing insertion into " + this.table[tabelName]);
+
+            var gr = new GlideRecord(this.table[tabelName]);
+            gr.initialize();
+
+            var field = '';
+            for (var key in recordData) {
+
+                field = recordData[key];
+                if (field || field == 0) {
+                    gr[key.toLowerCase()] = (field.constructor === Object || field.constructor === Array) ? JSON.stringify(field) : field + '';
+                }
+            }
+
+            gr.insert();
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.insertIntoIntermediateDump while inserting data into intermediate dump table. Error :- " + e);
+        }
+
+    },
+
+    deleteProcessQueue: function() {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.deleteProcessQueue Deleting data in process queue older than " + retPeriod + " days.");
+
+            var retPeriod = this.property.retPeriod - 1;
+
+            var queueObj = new GlideRecord(this.table.processQueue);
+            queueObj.addEncodedQuery("sys_created_on<=javascript:gs.daysAgoStart(" + retPeriod + ")");
+            queueObj.deleteMultiple();
+
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.deleteProcessQueue while inserting data into intermediate dump table. Error :- " + e);
+        }
+
+    },
+
+    createIncident: function(referenceIncident) {
+
+        try {
+
+            var assignedGroup = gs.getProperty('x_caci_cisco_inter.Cisco_Incident_Handler');
+
+            var gr = new GlideRecord(this.table.createIncident);
+
+            gr.initialize();
+            gr.assignment_group = assignedGroup;
+            gr.category = "hardware";
+
+            gr = this.setIncidentFields(gr, referenceIncident);
+
+            gr.caller_id = gs.getProperty('x_caci_cisco_inter.IncidentCallerName');
+            gr.cmdb_ci = referenceIncident.ci_record;
+
+            var incidentRefernce = gr.insert();
+
+            return incidentRefernce;
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.createIncident while Creating Incedents on particular alarms :- " + e);
+        }
+    },
+
+    updateIncident: function(incidentRef, target) {
+
+        try {
+            var severity = target.severity;
+            if (severity == 'Cleared') {
+
+                incidentRef.incident_state = 6;
+                incidentRef.close_code = 'Closed/Resolved by Caller';
+                incidentRef.close_notes = 'Incident Auto Resolved as the alarm got cleared on Intersight.';
+            }
+
+            // 			else{
+            // 				incidentRef = this.setIncid   entFields(incidentRef, target);
+            // 			}
+
+            incidentRef.update();
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.updateIncident while updating Incident. Exception :- " + e);
+        }
+    },
+
+    reOpenIncident: function(incidentRef) {
+
+        try {
+
+            incidentRef.incident_state = 2;
+            incidentRef.state = 2;
+            incidentRef.comments = 'Re-Opened Incident as the alarm was not cleared on Intersight.';
+            incidentRef.update();
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.reOpenIncident while re-opening Incident. Exception :- " + e);
+        }
+    },
+
+    cancelIncident: function(sys_id) {
+
+        try {
+
+            var gr = new GlideRecord(this.table.createIncident);
+            gr.addQuery('cmdb_ci', sys_id);
+            gr.addEncodedQuery('incident_state=6');
+            gr.query();
+            gr.incident_state = 7;
+            gr.close_code = 'Closed by Caller';
+            gr.close_notes = 'Auto Close Alarm due to deletion of Configuration Item/Component.';
+            gr.updateMultiple();
+
+
+            var gr = new GlideRecord(this.table.createIncident);
+            gr.addQuery('cmdb_ci', sys_id);
+            gr.addEncodedQuery('incident_stateNOT IN7,8');
+            gr.query();
+            gr.incident_state = 8;
+            gr.close_code = 'Closed by Caller';
+            gr.close_notes = 'Auto Close Alarm due to deletion of Configuration Item/Component.';
+            gr.updateMultiple();
+
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.cancelIncident. Error:- " + e);
+        }
+    },
+
+    setIncidentFields: function(incidentRef, target) {
+
+        try {
+            incidentRef.short_description = 'Intersight Alarm: ' + target.message;
+
+            var severity = target.severity;
+            if (severity == "Critical") {
+                incidentRef.severity = "1";
+                incidentRef.urgency = "1";
+                incidentRef.impact = "1";
+            } else if (severity == "Warning") {
+                incidentRef.severity = "2";
+                incidentRef.urgency = "2";
+                incidentRef.impact = "2";
+            } else if (severity == "Info") {
+                incidentRef.severity = "3";
+                incidentRef.urgency = "3";
+                incidentRef.impact = "3";
+            }
+
+            var descriptionData = 'Severity: ' + target.severity + '\n' +
+                'Code: ' + target.code + '\n' +
+                'Component: ' + target.component + '\n' +
+                'Message: ' + target.message;
+
+            incidentRef.description = descriptionData;
+            incidentRef.comments = descriptionData;
+
+            return incidentRef;
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.setIncidentFields while setting field values of incidents. Exception :- " + e);
+        }
+    },
+
+    clearApplicationData: function() {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.clearApplicationData deleting application data.");
+
+            var authGr = new GlideRecord("x_caci_cisco_inter_inventory_queue");
+            authGr.addQuery("state", "processing");
+            authGr.query();
+            if (!authGr.next()) {
+
+                //clearing alarms and queue tables .
+                var HouseKeepingTables = ['alarms', 'processQueue'];
+                for (var i in HouseKeepingTables) {
+                    var gr = new GlideRecord(this.table[HouseKeepingTables[i]]);
+                    gr.deleteMultiple();
+                }
+
+                //retiring CI items
+                var InventoryTables = ['hyperflexClusters', 'ciscoServers', 'fabricInterconnects'];
+                for (var j in InventoryTables) {
+                    var gr1 = new GlideRecord(this.table[InventoryTables[j]]);
+                    //gr1.install_status=7;
+                    gr1.operational_status = 6;
+                    gr1.updateMultiple();
+                }
+
+                var authRec = new GlideRecord(this.table.authentication);
+                if (authRec.get(this.property.authRec)) {
+
+                    authRec.account_name = '';
+                    authRec.host_name = '';
+                    authRec.url = '';
+                    authRec.api_key_id = '';
+                    authRec.secret_key = '';
+                    authRec.incident_assignment_group = '';
+                    authRec.incident_severity = '';
+                    authRec.log_levels = '0';
+                    authRec.validated = 'NO';
+                    authRec.conditions = '';
+                    authRec.mid_server = '';
+                    authRec.on_premises = false;
+                    authRec.advanced = false;
+                    authRec.script = '';
+                    authRec.collection = 'x_caci_cisco_inter_cisco_alarms';
+                    authRec.incident_caller_name = '';
+                    authRec.support_url = gs.getProperty('x_caci_cisco_inter.cisco.intersight.support');
+                    authRec.update();
+                }
+
+                var properties = ['x_caci_cisco_inter.alarm.raise.incident.conditions', 'x_caci_cisco_inter.Cisco_Alarms_LastTranistionTime', 'x_caci_cisco_inter.Cisco_Incident_Handler', 'x_caci_cisco_inter.IncidentCallerName'];
+
+                //clearing all properties except support url
+                for (var k in properties)
+                    gs.setProperty(properties[k], '');
+
+                gs.setProperty('x_caci_cisco_inter.start.import', false);
+
+                var incGr = new GlideRecord(this.table.createIncident);
+                incGr.addEncodedQuery('short_descriptionSTARTSWITHIntersight Alarm:^incident_state=6');
+                incGr.query();
+                incGr.incident_state = 7;
+                incGr.close_code = 'Closed by Caller';
+                incGr.close_notes = 'Auto Close Alarm due to deletion of Configuration Item/Component.';
+                incGr.updateMultiple();
+
+
+                var incGr = new GlideRecord(this.table.createIncident);
+                incGr.addEncodedQuery('short_descriptionSTARTSWITHIntersight Alarm:^incident_state!=8^incident_state!=7');
+                incGr.query();
+                incGr.incident_state = 8;
+                incGr.close_code = 'Closed/Resolved by Caller';
+                incGr.close_notes = 'Auto Cancelled Alarm due to deletion of Configuration Item/Component.';
+                incGr.updateMultiple();
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.clearApplicationData while deleting application data. Error :- " + e);
+        }
+
+    },
+
+    makeServerRelationships: function(target) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.makeServerRelationships creating server CI relations.");
+
+            var gr = new GlideRecord(this.table.hyperflexClusters);
+            gr.addEncodedQuery('name=' + target.tags["HX Cluster"]);
+            gr.query();
+            while (gr.next())
+                this.createRelationship(gr.sys_id, this.property.HXRelationship, target.sys_id);
+
+            var gr = new GlideRecord(this.table.fabricInterconnects);
+            gr.addEncodedQuery('device_moid=' + target.device_moid);
+            gr.query();
+            while (gr.next())
+                this.createRelationship(gr.sys_id, this.property.fiRelationship, target.sys_id);
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.makeServerRelationships while creating server CI relations. Error :- " + e);
+        }
+
+    },
+
+    makeFiRelationships: function(target) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.makeFiRelationships creating FI CI relations.");
+
+            var gr = new GlideRecord(this.table.ciscoServers);
+            gr.addEncodedQuery('device_moid=' + target.device_moid);
+            gr.query();
+            while (gr.next())
+                this.createRelationship(target.sys_id, this.property.fiRelationship, gr.sys_id);
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.makeFiRelationships while creating FI CI relations. Error :- " + e);
+        }
+
+    },
+
+    makeHXRelationships: function(target) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.makeHXRelationships creating HX CI relations.");
+
+            var gr = new GlideRecord(this.table.ciscoServers);
+            gr.addEncodedQuery('tagsLIKE' + target.name);
+            gr.query();
+            while (gr.next())
+                this.createRelationship(gr.sys_id, this.property.HXRelationship, target.sys_id);
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.makeHXRelationships while creating HX CI relations. Error :- " + e);
+        }
+    },
+
+    createRelationship: function(parentSysId, type, childSysID) {
+
+        try {
+
+            this.logger.debug("Inside Cisco_DAOScript.createRelationship creating CI relations.");
+
+            var cmdbRel = new GlideRecord(this.table.relationship);
+            cmdbRel.addQuery('parent', parentSysId);
+            cmdbRel.addQuery('type', type);
+            cmdbRel.addQuery('child', childSysID);
+            cmdbRel.query();
+
+            if (!cmdbRel.hasNext()) {
+
+                cmdbRel.initialize();
+                cmdbRel.parent = parentSysId;
+                cmdbRel.type = type;
+                cmdbRel.child = childSysID;
+                cmdbRel.insert();
+            }
+
+        } catch (e) {
+
+            this.logger.error("Exception caught inside Cisco_DAOScript.createRelationship while creating CI relations. Error :- " + e);
+        }
+
+    },
+
+    getHealth: function(sysId) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.getHealth while getting health for CI record with sysID " + sysId);
+
+            var gr = new GlideAggregate(this.table.alarms + '');
+            gr.addQuery('ci_record', sysId);
+            gr.addAggregate('COUNT', 'severity');
+            gr.query();
+
+            var health = 'Healthy';
+
+            while (gr.next()) {
+
+                if (gr.severity == 'Critical') {
+                    health = 'Critical';
+                    break;
+                } else if (gr.severity == 'Warning' && health != 'Critical') {
+                    health = 'Warning';
+                } else if (gr.severity == 'Info' && health != 'Critical' && health != 'Warning') {
+                    health = 'Info';
+                }
+            }
+
+            return health;
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.getHealth while getting health for CI record with sysID " + sysId + ". Error :- " + e);
+        }
+    },
+
+    getCmdbRecRef: function(source, devType) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.getCmdbRecRef while getting CMDB CI record.");
+
+            var tables = ['ciscoServers', 'hyperflexClusters', 'fabricInterconnects'];
+
+            for (var i in tables) {
+
+                var gr = new GlideRecord(this.table[tables[i]]);
+                gr.addQuery('moid', 'IN', source.ancestormoid + ',' + source.affectedmoid);
+                gr.setLimit(1);
+                gr.query();
+
+                if (gr.next())
+                    return gr.sys_id;
+            }
+
+            return '';
+
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.getCmdbRecRef while getting CMDB CI record. Error :- " + e);
+        }
+
+    },
+
+    getRegisteredDevice: function(moid) {
+
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.getRegisteredDevice.");
+            var gr = new GlideRecord(this.table.deviceRegistration);
+            gr.addQuery('moid', moid);
+            gr.query();
+
+            if (gr.next())
+                return gr;
+
+            return '';
+
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.getRegisteredDevice. Error :- " + e);
+        }
+    },
+
+    getAndUpdatePeerFI: function(deviceMoid, sysId) {
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.getAndUpdatePeerFI.");
+            var gr = new GlideRecord(this.table.fabricInterconnects);
+            gr.addQuery('device_moid', deviceMoid);
+            gr.addQuery('sys_id', '!=', sysId);
+            gr.query();
+
+            if (gr.next())
+                return gr.name;
+
+            return '';
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.getAndUpdatePeerFI. Error :- " + e);
+        }
+    },
+
+    setFlagsforAlarms: function() {
+        try {
+
+            var gr = new GlideRecord(this.table.alarms + '');
+            gr.query();
+            gr.setValue('deletion', true);
+            gr.updateMultiple();
+
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.setFlagsforAlarms. Error :- " + e);
+        }
+    },
+
+    //return json object of CI moid for alarms with deletion=true
+    getCIforDeletedAlarms: function() {
+        try {
+            this.logger.debug("Inside Cisco_DAOScript.getCIforDeletedAlarms.");
+            var ci_json = {};
+            var ci_className;
+            var ci_moid;
+            var ci_record;
+
+            var alarmsGR = new GlideRecord(this.table.alarms);
+            alarmsGR.query('deletion', 'true');
+            alarmsGR.query();
+
+            while (alarmsGR.next()) {
+                if (alarmsGR.incident.cmdb_ci) {
+                    ci_record = alarmsGR.incident.cmdb_ci.getRefRecord();
+                    ci_moid = ci_record.moid + '';
+                    if (!ci_json[ci_moid]) {
+                        ci_json[ci_moid] = [];
+                    }
+                    //marking moid's as false 
+                    ci_json[ci_moid] = 'false';
+                }
+            }
+            return ci_json;
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.getCIforDeletedAlarms. Error :- " + e);
+
+        }
+
+    },
+
+    deleteNotUpdatedAlarms: function() {
+        try {
+
+            this.logger.debug("Inside Cisco_DAOScript.deleteNotUpdatedAlarms.");
+
+            //fetch CI Json for alarm with deletion = true
+            var alarmsCIjson = this.getCIforDeletedAlarms();
+
+            //check if any alarm exists with deletion true
+            if (this.updateAlarmService.isJSONempty(alarmsCIjson) != 'true') {
+
+                //create filter using the CI moid using the updateAlarmService
+                var filterString = this.updateAlarmService.createDeletedAlarmsCIfilter(alarmsCIjson);
+
+                //check if realted CI is available on intersight using the updateAlarmService
+                var intersightGR = new GlideRecord(this.table.authentication);
+                intersightGR.get(this.property.authRec);
+                var CIjson = this.updateAlarmService.checkCIexistence(filterString, alarmsCIjson, intersightGR);
+
+
+                //updating incidents related to deleted alarms
+                var gr = new GlideRecord(this.table.alarms);
+                gr.query('deletion', 'true');
+                gr.query();
+                while (gr.next()) {
+                    //this code resolves incident of Server HX FI and also for Devices whose alarms are cleared and CI exists on intersight
+                    if (gr.incident) {
+                        if ((!gr.incident.cmdb_ci) || (CIjson[gr.incident.cmdb_ci.getRefRecord().moid + ''] + '' == 'true' && gr.incident.cmdb_ci)) {
+                            // marking incident as resolved
+                            var incidentRef = gr.incident.getRefRecord();
+                            incidentRef.incident_state = 6;
+                            incidentRef.close_code = 'Closed/Resolved by Caller';
+                            incidentRef.close_notes = 'Incident Auto Resolved as the alarm got cleared on Intersight.';
+                            incidentRef.update();
+                        }
+                    }
+                    gr.deleteRecord();
+                }
+            }
+        } catch (e) {
+            this.logger.error("Exception caught inside Cisco_DAOScript.deleteNotUpdatedAlarms. Error :- " + e);
+        }
+    },
+
+    type: 'Cisco_DAOScript'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-13 07:43:30</sys_created_on>
+        <sys_id>5aca3612db67630062a3d450cf9619af</sys_id>
+        <sys_mod_count>175</sys_mod_count>
+        <sys_name>Cisco_DAOScript</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_include_5aca3612db67630062a3d450cf9619af</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-12 04:23:25</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format/>
+        <height/>
+        <image>17b421ffdb4cf3005070d740cf961993</image>
+        <name>support-active.svg</name>
+        <size_bytes>1736</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:10:22</sys_created_on>
+        <sys_id>3110ca3adbc87700a4e47befbf961979</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>support-active.svg</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>db_image_3110ca3adbc87700a4e47befbf961979</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-14 13:44:40</sys_updated_on>
+        <thumbnail/>
+        <width/>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color/>
+        <chunk_size_bytes>734003</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/svg+xml</content_type>
+        <file_name>image</file_name>
+        <hash/>
+        <image_height/>
+        <image_width/>
+        <size_bytes>1736</size_bytes>
+        <size_compressed>796</size_compressed>
+        <state/>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-14 13:44:39</sys_created_on>
+        <sys_id>17b421ffdb4cf3005070d740cf961993</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-14 13:44:39</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>3110ca3adbc87700a4e47befbf961979</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="17b421ffdb4cf3005070d740cf961993">17b421ffdb4cf3005070d740cf961993</sys_attachment>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-14 13:44:39</sys_created_on>
+        <sys_id>57b421ffdb4cf3005070d740cf961993</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>VVXLbtw4ELz7KwjtVeD0i2Rz4fFhB/Ap+YHcAiTxGPBugs0gk89PNaXxSIAxUpf6Ud1dpB9//npJv/99++/ncTpfLj/+Phyu12u+av7+/8tBiOgAjyldX79czsep2pTOX19fzpfl/dfr1+s/338fJ0qUquFvenpI6fHH58s5fXt9eztOfz0/P0/py3H6qDJXSidr2ar2Jh5mpfkOhKWSTnhwzUUrSUsbf0vIYen0/hGGbV1HtG0z3l1RbGHwKQ0qkceySnX3sECk59qUWdJCAyxuDunuOtJEHzfvOVrfuNaFBh73hHfnOprA70LDPJ1UM5OV2muYOvivwLAqXPCw7L2YEhJsApaZoBml9XsZIO0CaMlCu9SbAE8LF5CSmrnMUrK2kk7vVmfq3mqK12KNS53xTZ0KcYClqRfXAFtlxSuCS+auRDwLypoIopJYbqKGXIFqVAHE3sq7fRLNtXBhsbsPenbuve9ySXZiNm77upJNSNxsy1GyyL6Vd2QpupqCVTVfC3p0T1lraU4ejZJX6a3P7BAZx+uYUu8UHkONpSIsSc8KEjOXXGO844lN5gplrmjLRF24yyZOHQy1kexKGLYVfIps+Rjn1u6cb+ba0c30TBg5lZ5GFvNiPmP9iqFbl6jo2FPoSQWkYYilDwqKzuIEQZcsXpu5jw6KYoMB12xahuqhyV4xPrTkzK3LBurwCj4boLchgfBptcUyZ3AzC7VIoOoVy7RAXUJaNuKJCpYJrXIWGjLEaMGnxEYDXc5DPE+K32oUKlo+ELZkBgltoylDNjUktCtFWVRaSGjLizKhk10Dd2ht8gZAkCje17qtGjCDMK0XivOGLfc4nTHzQhgjsn1AFCtDETgdPRcprTByNoyfuATq2C3Wwhrq8XFocE03bPgGrNtfLQzYoKe4EyKLQpOhFyRRjZZQ0HAe4jxjKlgrLxcOOHvFakNu1Ln2sVCszyt8eZAbsl7eom9tFoVuEBrA1KLKJocEqx5FdvXi+HKFw5bbevncO9jdTZ+mw9PDY/x/enr4A3qW4PnIBgAA</data>
+        <length>1048</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="17b421ffdb4cf3005070d740cf961993">17b421ffdb4cf3005070d740cf961993</sys_attachment>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-14 13:44:39</sys_created_on>
+        <sys_id>d7b421ffdb4cf3005070d740cf961993</sys_id>
+    </sys_attachment_doc>
+</record_update>

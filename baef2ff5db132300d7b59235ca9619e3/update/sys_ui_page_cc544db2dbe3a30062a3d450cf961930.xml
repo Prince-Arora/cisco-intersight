@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_caci_cisco_inter_Cisco_SupportPage.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	 <g:evaluate var="jvar_not" object="true">
+		 
+		 var supURL = gs.getProperty('x_caci_cisco_inter.cisco.intersight.support');
+		 supURL;
+		 
+	</g:evaluate>
+	
+	
+	<body onload="onLoad()">
+	<style>
+		table {
+              border-collapse: collapse;
+              width: 100%;
+		}
+		th,tr{
+		     padding: 2px;
+             text-align: left;
+             border-bottom: 1px solid #ddd;	
+		}
+		.details{
+		font-size:14px;
+		}
+		.tabHead{
+		 font-size:15px;
+		 background-color: #dcdcdc;
+		}
+		
+		.details:hover {background-color:#E6E6FA;}
+		
+
+	</style>
+	<h2>Contact Support</h2>
+	<h4>Cisco</h4>
+	<div style="color:#FF5733"><h5>Important:- Perform action mentioned against your role.</h5></div>
+	<table>	
+		<thead>			
+			<th class="tabHead">&#160;&#160;Your Role</th>		
+			<th class="tabHead">Action</th>			
+		</thead>
+		
+		<tr class="details">			
+			<td><div id="username">&#160;&#160;Non-Admin Users</div></td>
+			<td><div id="targetuser">Report to Admin Users.</div></td>
+		</tr>
+		<tr class="details">			
+			<td><div style="color:#FFFFFF">&#160;</div></td>
+			<td></td>
+		</tr>
+		<tr class="details">
+			<td>&#160;&#160;Admin Users</td>
+			<td colspan="2" ><div id="Portal" style="width: 50em;word-wrap: break-word;">Check The Error Logs and Consult The Documentation. If issue is not Resolved or not mentioned in the Document</div></td>		
+		</tr>				
+		
+		<tr class="details">
+			<td></td>
+			<td>Please contact us at&#160;<a href="mailto: ${jvar_not}" target="_blank">${jvar_not}</a></td>		
+		</tr>
+		
+	</table>
+	
+	<br />
+	<div style="color:#FF5733">Note:- Use This Option Only When Required.</div>
+	</body>
+	
+</j:jelly>]]></html>
+        <name>Cisco_SupportPage</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-14 12:25:36</sys_created_on>
+        <sys_id>cc544db2dbe3a30062a3d450cf961930</sys_id>
+        <sys_mod_count>25</sys_mod_count>
+        <sys_name>Cisco_SupportPage</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_ui_page_cc544db2dbe3a30062a3d450cf961930</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-06-12 12:11:02</sys_updated_on>
+    </sys_ui_page>
+</record_update>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="out_of_band_ip_mask" label="Out Of Band IP Mask" language="en" table="x_caci_cisco_inter_cisco_fibre_interconnects">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>out_of_band_ip_mask</element>
+            <help/>
+            <hint/>
+            <label>Out Of Band IP Mask</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_fibre_interconnects</name>
+            <plural>Out Of Band IP Masks</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-19 13:06:08</sys_created_on>
+            <sys_id>365fba5cdbf32300b6237a61399619d8</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Out Of Band IP Mask</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_documentation_x_caci_cisco_inter_cisco_fibre_interconnects_out_of_band_ip_mask_en</sys_update_name>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-19 13:06:08</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

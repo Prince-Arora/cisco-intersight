@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description/>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_caci_cisco_inter.cisco.intersight.support</name>
+        <read_roles>x_caci_cisco_inter.intersight_admin</read_roles>
+        <suffix>cisco.intersight.support</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-19 13:51:28</sys_created_on>
+        <sys_id>b9a9c71cdb73230062a3d450cf96196d</sys_id>
+        <sys_mod_count>14</sys_mod_count>
+        <sys_name>x_caci_cisco_inter.cisco.intersight.support</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_properties_b9a9c71cdb73230062a3d450cf96196d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-06-12 10:54:37</sys_updated_on>
+        <type>string</type>
+        <value>intersight-snow-feedback@cisco.com</value>
+        <write_roles>x_caci_cisco_inter.intersight_admin</write_roles>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=b9a9c71cdb73230062a3d450cf96196d"/>
+</record_update>

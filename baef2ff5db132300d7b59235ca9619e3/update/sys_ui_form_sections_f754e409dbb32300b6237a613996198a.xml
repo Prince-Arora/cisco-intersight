@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_form_sections form_id="f754e409dbb32300b6237a613996198a" sys_domain="global" table="x_caci_cisco_inter_cisco_hyperflex_clusters" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-21 09:44:26</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>ff54e409dbb32300b6237a613996198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_caci_cisco_inter_cisco_hyperflex_clusters" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">f754e409dbb32300b6237a613996198a</sys_ui_form>
+            <sys_ui_section caption="NULL" display_value="" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">9d30540ddb732300b6237a61399619c6</sys_ui_section>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-21 09:44:26</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-21 09:44:27</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>0464e409dbb32300b6237a61399619a0</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_caci_cisco_inter_cisco_hyperflex_clusters" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">f754e409dbb32300b6237a613996198a</sys_ui_form>
+            <sys_ui_section caption="Cluster Details" display_value="Cluster Details" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">fb54e409dbb32300b6237a6139961989</sys_ui_section>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-21 09:44:41</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>2</position>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-21 09:44:26</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>c864e409dbb32300b6237a613996198e</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_caci_cisco_inter_cisco_hyperflex_clusters" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">f754e409dbb32300b6237a613996198a</sys_ui_form>
+            <sys_ui_section caption="Storage Details" display_value="Storage Details" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">ff54e409dbb32300b6237a6139961988</sys_ui_section>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-21 09:44:41</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>3</position>
+            <sys_created_by>girishgyani</sys_created_by>
+            <sys_created_on>2019-03-04 08:37:52</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>379e306cdb00b30062a3d450cf961955</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_caci_cisco_inter_cisco_hyperflex_clusters" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">f754e409dbb32300b6237a613996198a</sys_ui_form>
+            <sys_ui_section caption="CI Relations" display_value="CI Relations" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sys_domain="global" view="Default view">779e306cdb00b30062a3d450cf961953</sys_ui_section>
+            <sys_updated_by>girishgyani</sys_updated_by>
+            <sys_updated_on>2019-03-04 08:37:52</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>x_caci_cisco_inter_cisco_hyperflex_clusters</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-21 09:44:26</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>f754e409dbb32300b6237a613996198a</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>x_caci_cisco_inter_cisco_hyperflex_clusters</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_ui_form_sections_f754e409dbb32300b6237a613996198a</sys_update_name>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-03-11 08:39:05</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

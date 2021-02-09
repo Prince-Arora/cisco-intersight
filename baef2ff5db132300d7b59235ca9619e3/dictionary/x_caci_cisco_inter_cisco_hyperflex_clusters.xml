@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="cmdb_ci_cluster" label="Cisco HyperFlex Clusters" max_length="40" name="x_caci_cisco_inter_cisco_hyperflex_clusters" sizeclass="0" type="collection">
+        <element label="Account MoID" max_length="255" name="account_moid" type="string"/>
+        <element label="Cluster Name" max_length="255" name="cluster_name" type="string"/>
+        <element label="Compute Node count" max_length="255" name="compute_node_count" type="string"/>
+        <element label="Converged Node Count" max_length="255" name="converged_node_count" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Create Time" max_length="255" name="create_time" type="glide_date_time"/>
+        <element label="Device ID" max_length="255" name="device_id" type="string"/>
+        <element label="Domain Group MoID" max_length="255" name="domain_group_moid" type="string"/>
+        <element label="Fltagr" max_length="255" name="fltagr" type="string"/>
+        <element label="Health" max_length="255" name="health" type="string"/>
+        <element label="HX Dp Build version" max_length="255" name="hx_dp_build_version" type="string"/>
+        <element label="HyperFlex Version" max_length="255" name="hx_version" type="string"/>
+        <element label="HyperVisor Type" max_length="255" name="hypervisor_type" type="string"/>
+        <element label="HyperVisor Version" max_length="255" name="hypervisor_version" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Mod Time" max_length="255" name="mod_time" type="glide_date_time"/>
+        <element label="moid" max_length="255" name="moid" type="string"/>
+        <element label="Storage Optimization" max_length="255" name="optimization" type="string"/>
+        <element label="Owners" max_length="1000" name="owners" type="string"/>
+        <element label="Parent" max_length="500" name="parent" type="string"/>
+        <element label="Storage Capacity" max_length="255" name="storage_capacity" type="string"/>
+        <element label="Storage Utilization" max_length="300" name="storage_utilization" type="string"/>
+        <element label="Switch ID" max_length="40" name="switch_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Tags" max_length="10000" name="tags" type="simple_name_values"/>
+        <element label="Type" max_length="255" name="type" type="string"/>
+        <element label="Uptime" max_length="255" name="uptime" type="string"/>
+        <element label="VM Count" max_length="255" name="vm_count" type="string"/>
+    </element>
+</database>

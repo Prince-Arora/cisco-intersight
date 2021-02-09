@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope,$timeout) {
+  /* widget controller */
+  var c = this;
+	$timeout(function(){
+		switch (c.data.id) {
+			case 'cisco_userProfile':$scope.update_breadcrumbs("User Profile");break;
+			case 'cisco_alarms':$scope.update_breadcrumbs("Alarms");break;
+			case 'cisco_incidents':$scope.update_breadcrumbs("Incidents");break;
+			case 'cisco_servers':$scope.update_breadcrumbs("Servers");break;
+			case 'cisco_hx':$scope.update_breadcrumbs("HyperFlex Clusters");break;
+			case 'cisco_fi':$scope.update_breadcrumbs("Fabric Interconnects");break;
+			case 'cisco_support':$scope.update_breadcrumbs("Support");break;
+			default: $scope.update_breadcrumbs("Dashboard");
+		}
+	})
+	
+$scope.update_breadcrumbs=function(page_name){
+	$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":page_name,"url":"#"}]);
+}	
+}
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>ul{
+padding:0;
+}
+.list-group-item{
+ 	background-color:#FFFFFF;
+  margin-bottom:1px;
+  border:none;
+  border-radius:0px;
+}
+img{
+height:16px;
+  width:16px;
+}
+.active{
+background-color:#049FD9;
+  .list-group-item-title{
+	color:#FFFFFF;
+  font-weight:400;
+}
+}
+
+.list-group-item-title{
+  line-height:2em;
+	color:#131313;
+  font-weight:400;
+  padding:10px;
+}
+
+.horizontal-separator{
+  background-color:#d3d3d3;
+  height:1px;
+  width:85%;
+  margin:10px 0px 10px 13px;
+}
+@media only screen and (min-width: 991px) {
+.sidenav {
+  height:100vh;
+  width: 210px;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  font-size:13px;
+  background-color: #FFFFFF;
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+}
+@media only screen and (max-width: 991px) {
+.sidenav {
+  height:100vh;
+  width: 45px;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  font-size:13px;
+  background-color: #FFFFFF;
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+ .list-group-item-title{
+ 		display:none;
+ }
+  .horizontal-separator{
+    display:none;
+  }
+}
+.sidenav li:hover {
+  background-color: #049FD9;
+  .list-group-item-title{
+	color:#FFFFFF;
+}
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>cisco_sidebar</id>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_sidebar</name>
+        <option_schema/>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	
+	data.id=$sp.getParameter('id');
+	//gs.addErrorMessage(data.id)
+	data.list_items_json={
+		items:[
+			{
+				"icon":"dashboard.svg",
+				"active_icon":"dashboard-active.svg",
+				"name":"Dashboard",
+				"url":"?id=cisco_homepage",
+				"active":(data.id==undefined||data.id=='cisco_homepage')?true:false
+			},
+			{
+				"icon":"alarms.svg",
+				"active_icon":"alarms-active.svg",
+				"name":"Alarms",
+				"url":"?id=cisco_alarms",
+				"active":(data.id=='cisco_alarms')?true:false
+			},
+			{
+				"icon":"incidents.svg",
+				"active_icon":"incidents-active.svg",
+				"name":"Incidents",
+				"url":"?id=cisco_incidents",
+				"active":(data.id=='cisco_incidents'||data.id=="cisco_incidents_form")?true:false
+			},
+			{
+				"icon":"servers.svg",
+				"active_icon":"servers-active.svg",
+				"name":"Servers",
+				"url":"?id=cisco_servers",
+				"active":(data.id=='cisco_servers'||data.id=='cisco_servers_form')?true:false
+			},
+			{
+				"icon":"hx.svg",
+				"active_icon":"hx-active.svg",
+				"name":"HyperFlex Clusters",
+				"url":"?id=cisco_hx",
+				"active":(data.id=='cisco_hx'||data.id=='cisco_hx_form')?true:false
+			},
+			{
+				"icon":"fi.svg",
+				"active_icon":"fi-active.svg",
+				"name":"Fabric Interconnects",
+				"url":"?id=cisco_fi",
+				"active":(data.id=='cisco_fi'||data.id=='cisco_fi_form')?true:false
+			},
+			{
+				"icon":"support.svg",
+				"active_icon":"support-active.svg",
+				"name":"Support",
+				"url":"?id=cisco_support",
+				"active":(data.id=='cisco_support')?true:false
+			}
+		]};
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-02-18 06:34:46</sys_created_on>
+        <sys_id>0c3c9cc4db332300a4e47befbf961965</sys_id>
+        <sys_mod_count>316</sys_mod_count>
+        <sys_name>cisco_sidebar</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_0c3c9cc4db332300a4e47befbf961965</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-19 14:18:04</sys_updated_on>
+        <template><![CDATA[<div class="sidenav">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <ul class="list-group">
+   <div  ng-repeat="i in c.data.list_items_json.items" >
+     <a href="{{i.url}}">  
+       <li class="list-group-item" ng-class="{'active':i.active}" ng-click="update_breadcrumbs(i.name)">
+         <span class="list-group-item-icon"><img ng-if="i.active==false" src="{{i.icon}}"/><img ng-if="i.active" src="{{i.active_icon}}"/></span>
+         <span class="list-group-item-title">{{i.name}}</span>
+       </li>
+       <div class="horizontal-separator" ng-if="$index==2||$index==5"></div>
+     </a>
+   </div>
+	</ul>
+</div>]]></template>
+    </sp_widget>
+</record_update>

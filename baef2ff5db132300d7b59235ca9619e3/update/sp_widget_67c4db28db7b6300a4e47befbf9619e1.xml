@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $location, spUtil, amb, $http, spAriaUtil, $timeout) {
+	var c = this;
+	/*
+	 * options:
+	 * hide_footer (bool) = true to remove the data table footer contents
+	 * hide_header (bool) = true to remove the data table header contents
+	 * show_new (bool) = true to show the "New" record button
+	 * show_keywords (bool) = true to show the keyword search field
+	 * table (string) = the table name to query
+	 * filter (string) = the encoded query
+	 * o (string) = the order by column
+	 * d (string) = The order by direction: asc or desc
+	 * p (int) = the page to jump to
+	 * fields (string) = comma seperated list of fields that become the list columns
+	 * view (string) = the default view to load for columns, overrides fields
+	*/
+$scope.set_window_size=function(size){
+	c.options.window_size=size;
+	c.server.update()
+}
+	$scope.exportTypes = [{label:'PDF', value: 'PDF'}, {label:'Excel', value:'EXCEL'}, {label:'CSV', value:'CSV'}];
+	var keys = ['table', 'filter', 'p', 'o', 'd'];
+
+	var eventNames = {
+		click: 'data_table.click',
+		setFilter: 'data_table.setFilter',
+		setKeywords: 'data_table.setKeywords'
+	};
+
+	$scope.go = function(table, item) {
+		
+		if(table=="x_caci_cisco_inter_cisco_alarms"){
+			return;
+		}
+		/*else if(table=="incident"){
+			
+			$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"Incidents","url":"?id=cisco_incidents"},{"label":item.number.value,"url":"#"}]);
+		}
+		else if(table=="x_caci_cisco_inter_cisco_servers"){
+			$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"Servers","url":"?id=cisco_servers"},{"label":item.name.value,"url":"#"}]);
+		}
+		else if(){
+			
+		}*/
+		
+		
+			var parms = {};
+		
+		//customization
+		if(!c.data.page_id.includes("form"))
+		{
+		parms.id=c.data.page_id+"_form";
+		}
+		else{
+			
+			parms.id="cisco_servers_form";
+		}
+		parms.table = table;
+		parms.sys_id = item.sys_id;
+		parms.record = item;
+		$scope.ignoreLocationChange = true;
+		for (var x in c.data.list) {
+			c.data.list[x].selected = false;
+		}
+		item.selected = true;
+		//alert(eventNames.click)
+		$scope.$emit(eventNames.click, parms);
+	};
+
+	$scope.newRecord = function(){
+		var parms = {
+			id: 'form',
+			table: $scope.data.table,
+			view: $scope.data.view,
+			sys_id: '-1'
+		};
+		if ($scope.data.filter != '')
+			parms.query = $scope.data.filter;
+
+		$location.search(parms);
+	};
+
+	function recoverStateFromUrl() {
+		$scope.data.fields = [];
+		var s = $location.search();
+		for (var x in keys) {
+			if (s[keys[x]]) {
+				$scope.data[keys[x]] = s[keys[x]];
+			}
+		}
+		$scope.server.update().then(function(data) {
+			if (s.sys_id) {
+				for (var x in data.list) {
+					if (data.list[x].sys_id == s.sys_id) {
+						$scope.go(s.table, data.list[x]);
+					}
+				}
+			}
+		});
+	}
+
+	if ($scope.options.fromUrl) {
+		var origSearch = $location.search();
+		$scope.$on('$locationChangeSuccess', function(e) {
+			var s = $location.search();
+			if (origSearch.id !== s.id)
+				return;
+
+			if ($scope.ignoreLocationChange){
+				$scope.ignoreLocationChange = false;
+				return;
+			}
+
+			// Helps to recover state when using the browser's back button
+			recoverStateFromUrl();
+		});
+	}
+
+
+	$scope.getNumber = function(num) {
+		return new Array(num);
+	}
+
+	$scope.mathMin = function(v1,v2) {
+		return Math.min(v1,v2);
+	}
+
+	function getData(updateUrl) {
+		var f = $scope.data;
+		spUtil.update($scope).then(function(data) {
+			f.view = data.view;
+			if ($scope.options.fromUrl && updateUrl)
+				setPermalink(f.table, f.filter, f.o, f.d, f.p);
+
+				//$scope.$broadcast('widget-filter-breadcrumbs.setBreadcrumbs', data.filterBreadcrumbs.data, data.filter);
+
+			initRecordWatcher(f.table, f.filter);
+		});
+	}
+
+	function setPermalink(table, filter, orderBy, orderDirection, page){
+		$scope.ignoreLocationChange = true;
+		var search = $location.search();
+		angular.extend(search, {
+			spa: 1,
+			table: table,
+			filter: filter,
+			p: page,
+			o: orderBy,
+			d: orderDirection
+		});
+		$location.search(search);
+	}
+
+	var watcher;
+	function initRecordWatcher(table, filter){
+		if (watcher)
+			watcher.unsubscribe();
+
+		if (table && filter) {
+			var watcherChannel = amb.getChannelRW(table, filter);
+			amb.connect();
+			watcher = watcherChannel.subscribe(function(message) {
+				if (!message.data)
+					return;
+				switch(message.data.action) {
+					case "change":
+						updateRowFromRW(message);
+						break;
+					case "exit":
+						// A record was removed
+					case "enter":
+						// A record was added
+					default:
+						spUtil.update($scope);
+						break;
+				}
+			});
+		}
+	}
+
+	function updateRowFromRW(message) {
+		if (message.data && message.data.sys_id && $scope.data.list) {
+			var row, field;
+			for(var i=0;i<$scope.data.list.length; i++) {
+				row = $scope.data.list[i];
+				if (row.sys_id == message.data.sys_id) {
+					var fields = Object.getOwnPropertyNames(message.data.record);
+					for(var f in fields) {
+						field = fields[f];
+						if(typeof row[field] !== 'undefined') {
+						    row[field].display_value = message.data.record[field].display_value;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	$scope.$on('$destroy', function() {
+		if (watcher)
+			watcher.unsubscribe();
+	});
+
+	$scope.setPageNum = function(num) {
+		if (num <= c.data.num_pages && num > 0) {
+			c.data.error_msg = undefined;
+			$scope.data.p = num;
+			getData(true);
+			$timeout(function() {
+				$scope.focusOnTableHeader();
+			});
+		} else {
+			c.data.error_msg = "Invalid input";
+		}
+	}
+
+	$scope.setOrderBy = function(field) {
+		var d = "asc";
+		if ($scope.data.o == field) {
+			if ($scope.data.d == "asc")
+				d = "desc";
+			else
+				d = "asc";
+		}
+
+		if (d === "asc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
+		} else if (d === "desc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
+		}
+
+		$scope.data.o = field;
+		$scope.data.d = d;
+		$scope.setSearch(true);
+	}
+
+	$scope.setSearch = function(updateUrl) {
+		$scope.data.p = 1;
+		getData(updateUrl);
+	}
+
+	$scope.$on(eventNames.setFilter, function(e, newFilter){
+		//gs.addInfoMessage('gurjot '+e+newFilter)
+		$scope.data.filter = newFilter;
+		$scope.setSearch(false);
+	});
+
+	$scope.$on(eventNames.setKeywords, function(e, keywords){
+		$scope.data.keywords = keywords;
+		$scope.setSearch(false);
+	});
+
+	$scope.$on('widget-filter-breadcrumbs.queryModified', function(e, newFilter){
+		$scope.data.filter = newFilter;
+		$scope.setSearch(true);
+	});
+
+	$scope.rowsWerePruned = function() {
+		if (!$scope.data.list)
+			return;
+
+		$scope.rowsPruned = $scope.mathMin($scope.data.window_end,$scope.data.row_count) - $scope.data.window_start - $scope.data.list.length;
+		return $scope.rowsPruned > 0;
+	}
+
+	$scope.showFilter = function() {
+		return !$scope.data.list.length && !$scope.data.num_pages && !$scope.data.invalid_table && !$scope.loadingData;
+	}
+
+	c.appendQuery = function(query){
+		if ($scope.data.filter.length > 1)
+			$scope.data.filter += '^';
+		$scope.data.filter += query;
+			$scope.setSearch();
+
+	}
+
+	// Makes Widget Async
+	var title = $scope.data.title;
+	if ($scope.options.use_instance_title == 'true')
+		title = $scope.options.title;
+	$scope.data = $scope.options;
+	$scope.loadingData = true;
+	$scope.server.update().then(function() {
+		if ($scope.data.newButtonUnsupported)
+			console.log("Service Portal: New button not supported for sys_attachment list");
+		$scope.loadingData = false;
+		$scope.data.title = title;
+		initRecordWatcher($scope.data.table, $scope.data.filter);
+	});
+
+	function parseQuery(table, queryString){
+		return $http.post('/api/now/sp/parsequery/' + table, queryString).then(function(response){
+				return response.data.result;
+		});
+	}
+
+	c.createQueryTerm = function(table, field, sys_id, operator){
+		return $http.get('/api/now/sp/getInOutQueryTerm', {
+			params: {
+				table: table,
+				sys_id: sys_id,
+				field: field,
+				operator: operator
+			}
+		}).then(function(response){
+			if (response && response.data && response.data.result)
+				return response.data.result.parts;
+		});
+	}
+
+	c.showMatching = function(field, newTerm) {
+		var queryString = $scope.data.filter;
+		var eq = "";
+		parseQuery($scope.data.table, queryString).then(function(oldTerms) {
+			for(var i=0; i<oldTerms.length; i++){
+				var term = oldTerms[i];
+				if (isSameField(newTerm, term))
+					continue;
+
+				if (eq.length)
+					eq += '^';
+
+				eq += getEncodedTerm(term);
+			}
+			if (eq.length)
+					eq += '^';
+			eq += getEncodedTerm(newTerm);
+
+			$scope.data.filter = eq;
+			$scope.setSearch();
+		});
+	};
+
+	c.filterOut = function(field, newTerm) {
+		var eq = $scope.data.filter;
+		if (eq.length)
+					eq += '^';
+
+		eq += getEncodedTerm(newTerm);
+		$scope.data.filter = eq;
+		$scope.setSearch();
+	};
+
+	function isSameField(t1, t2) {
+		if ('left' in t1 && 'left' in t2)
+			return t1.left.field === t2.left.field;
+		else if ('left' in t1)
+			return t1.left.field === t2.field;
+		else if ('left' in t2)
+			return t1.field === t2.left.field;
+		return t1.field === t2.field;
+	}
+
+	function getEncodedTerm(term) {
+		var eq;
+		if (term.left) {
+			eq = getEncodedTerm(term.left);
+			eq += '^OR';
+			eq += getEncodedTerm(term.right);
+		} else {
+			eq = term.field;
+			eq += term.operator;
+			eq += term.value;
+		}
+		return eq;
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>
+//changing color of filter removed padding
+.panel-heading {
+  padding-top:0;
+  padding-bottom:0;
+  a , .icon-filter{
+  color:#50556B !important;
+  }
+}
+
+
+.load-filter-btn{
+display:none;
+}
+.save-filter-btn{
+display:none;
+}
+
+.incident-state-7{
+  color:#66BB6A;
+}
+.incident-state-8{
+  color:#000000;
+}
+.incident-state-6{
+  color:#049FD9;
+}
+.incident-state-1{
+  color:#004BAF;
+}
+.incident-state-3{
+  color:#EE5350;
+}
+.incident-state-2{
+  color:#FFA000;
+}
+
+
+.health-status-critical {
+  min-width:100px;
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+  padding: 5px 10px 5px 10px;
+  background-color: #E85454;
+  color:#ffffff;
+}
+
+.health-status-warning {
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #FFA000;
+  color:#ffffff;
+}
+
+.health-status-info {
+ 	font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #0095D3;
+  color:#ffffff;
+}
+
+.health-status-cleared {
+ 	font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #66BB6A;
+  color:#ffffff;
+}
+
+td {
+  //max width for ellipsis
+    max-width: 270px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+//========================breadcrumb=========
+
+//filter icon
+.icon-filter {
+  padding-left: 0px;
+  padding-right: 5px;
+}
+//before clicking
+.icon-filter:before {
+  font-size: 15px;
+    margin-bottom: 3px;
+}
+
+//for the filter breadcrumbs
+.breadcrumbs {
+  margin-left: 0px !important;
+  //border: 1px solid red;
+  span {
+    vertical-align: -webkit-baseline-middle;
+  }
+}
+
+.table &gt; thead &gt; tr &gt; th {
+border-bottom:0;
+}
+
+
+.ng-filter-widget {
+  background-color: #FAFAFA !important;
+  border: 1px solid #E0E0E0 !important;
+  min-width:100% !important;
+}
+nd_operator_0 {
+  background-color: #FFFFFF;
+  border: 1px solid #D7D7D7;
+//  border-radius: 3px;
+  width: 287px;
+  height: 35px;
+}
+.sn-filter-compound-title {
+  color: #880024 !important;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 16px;
+  text-align: left;
+}
+
+//buttons within the filter
+.btn-group {
+  input {
+    border-radius: 0px !important;
+    margin-left: -3px !important;
+    margin-right: -6px !important;
+  }
+  a {
+    border-radius: 0px !important;
+    margin-left: -3px !important;
+    margin-right: -3px !important;
+    }
+}
+.btn.btn-primary.sn-filter-tooltip {
+  background-color: #049FD9;
+  border-radius: 3px;
+  width: 104px;
+  height: 35px;
+  border: none;
+}
+//=================================
+
+//thead headings
+.table &gt; thead &gt; tr &gt; th {
+  vertical-align: middle;
+  text-align:right;
+  font-weight: 500 !important; 
+  background-color:#1F2D3D;
+  margin:1px;
+}
+
+thead {
+  border-top:0 !important;
+  border-bottom: 1px solid #ddd;
+}
+
+th i {
+  display: inline-block;
+  margin-left: 5px;
+  color: #A0A0A0;
+}
+
+th .disabled{
+  color:#ddd;
+}
+tr,td,th{
+  max-height:40px !important;
+}
+div.th-title.ng-binding {
+  display: inline-block;
+  white-space: nowrap;
+  color:#FFFFFF !important;
+  font-size:14px;
+  font-weight:500;
+  color: $primary;
+}
+.pointer {
+  white-space: nowrap;
+}
+.panel-body {
+  overflow: auto;
+  padding: 0px;
+  height:auto;
+}
+.panel{
+width:100%;
+}
+
+.content-table tr:nth-child(even) {
+  background-color: #FCFCFC;
+  color: #252525;
+  font-size: 13px;
+  font-weight: 400;
+  td,th {
+    padding: 12px 12px 12px 15px !important;
+  }
+}
+.content-table tr:nth-child(odd) {
+  background-color: #FFFFFF;
+  color: #252525;
+  font-size: 13px;
+  font-weight: 400;
+  td,th {
+    padding: 12px 12px 12px 15px !important;
+  }
+}
+.selected {
+  color: #fff;
+  background-color: #909090;
+  border-color: 1px solid #fff;
+}
+.content-table:odd {
+ // background-color: red;
+}
+tbody tr:last-child {
+  border-bottom: none;
+}
+.table_body{
+overflow:auto;
+  height:100px !important;
+}
+.pruned-msg {
+  padding-bottom: 10px;
+  padding-left: 4px;
+  text-align: center;
+}
+.pruned-msg-filter-pad {
+  padding-top:8px;
+}
+
+.filter-breadcrumbs {
+  border-bottom: 1px solid #ddd;
+  padding-top: 3px;
+}
+
+.dropdown-toggle {
+  background: none;
+  padding: 0 0 4px 0;
+}
+//=============
+.pagination {
+  margin: 10px 0px 10px 0px !important;
+  display: inline-block;
+  border-radius: 0px;
+}
+.pagination a {
+  font-weight:600;
+    color: #252525;
+    //float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #DDDDDD;
+  	border-radius: 0px;
+}
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+.item-left {
+  float: left;
+}
+.item-right {
+  float : right;
+}
+.pagination-container {
+  background-color: #F6F7F8;
+ // margin-top: -7px;
+  padding-left: 6px;
+  width: 100%;
+}
+.pagination a:hover:not(.active) {background-color: #ddd;}
+.pagination input {
+  border: 1px solid #ddd;
+  border-left: 0px;
+  border-right: 0px;
+  max-width: 90px;
+  padding : 8px 10px 8px 10px;
+  border-radius: 0px;
+  font-weight:600;
+}
+li.pagination-item {
+  a {
+  border-radius: 0px !important;
+  }
+}
+.item-search{
+padding-top:20px;
+}
+
+#search-button {
+  border-radius: 0px !important;
+}
+.disabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+.panel-footer {
+  padding-top: 0px;
+  padding-bottom: 0px;  
+  //margin-bottom:10px;
+}
+
+.panel{
+//margin-bottom:65px;
+}
+.asc, .desc {
+  float: right;
+}
+.fa {
+  padding: 0px;
+  margin: 0px;
+  font-size: 17px;
+}
+.fa-search {
+  font-size: 14px;
+}
+.error_msg {
+  color: red;
+}
+.table{
+margin-bottom:0;
+}
+.table_row:hover {
+  background-color: #E0E0E0 !important;
+}
+.table_row {
+line-height:18px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}</css>
+        <data_table>sp_instance_table</data_table>
+        <demo_data>{"data":
+	{
+		"table": "incident",
+		"view": "default",
+		"o": "opened_at",
+		"d": "desc",
+		"filter": "activeEQtrue",
+		"p": 1,
+		"fields": "number,short_description"
+	}
+}</demo_data>
+        <description/>
+        <docs/>
+        <field_list>table,filter,field_list,maximum_entries,order,order_by,order_direction,title,color,glyph,sp_page</field_list>
+        <has_preview>false</has_preview>
+        <id>cisco_datatable</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope, element, attrs, ctrl){
+	var $ul, $contextMenu;
+
+	scope.focusOnTableHeader = function() {
+		element.find(".data-table-title").attr("tabindex", "-1").focus();
+	}
+
+	element.on('contextmenu', function(e){
+		if (e.ctrlKey)
+			return; // ctrlKey is for the debug menu, not this menu
+
+		var rowScope = angular.element(e.target).scope();
+		var field, item, fieldVal;
+
+		// Context Menu for tbody
+		if (angular.isDefined(rowScope.field) && angular.isDefined(rowScope.item)){
+			e.preventDefault();
+			field = rowScope.field;
+			item = rowScope.item;
+			fieldVal = item[field].value;
+
+			var items = [
+				['${Show Matching}', function(){
+					ctrl.createQueryTerm(scope.data.table, field, item.sys_id, '=').then(function(term){
+						ctrl.showMatching(field, term);
+					});
+				}],
+				['${Filter Out}', function(){
+					ctrl.createQueryTerm(scope.data.table, field, item.sys_id, '!=').then(function(term){
+						ctrl.filterOut(field, term);
+					});
+				}]
+			];
+
+			renderContextMenu(items);
+			setContextMenuPosition(e);
+		}
+	});
+
+	function renderContextMenu(items){
+		var scrollHeight = $('body').get(0).scrollHeight;
+		$contextMenu = angular.element('<div>', {'class': 'dropdown clearfix context-dropdown open'});
+
+		$contextMenu.on('click', function (e) {
+			if ($(e.target).hasClass('dropdown')) {
+				_clearContextMenus(event);
+			}
+		});
+		$contextMenu.on('contextmenu', function (event) {
+			event.preventDefault();
+			_clearContextMenus(event);
+		});
+
+		$contextMenu.css({
+			position: 'absolute',
+			top: 0,
+			height: scrollHeight,
+			left: 0,
+			right: 0,
+			zIndex: 9999
+		});
+
+		$('body').append($contextMenu);
+
+		$ul = angular.element('<ul>', {
+			'class': 'dropdown-menu',
+			'role': 'menu'
+		});
+		renderItems();
+		$contextMenu.append($ul);
+
+		function renderItems(){
+			angular.forEach(items, function (item) {
+				var $li = angular.element('<li>');
+
+				if (item === null) {
+					$li.addClass('divider');
+				} else {
+					var $a = angular.element('<a>');
+					$a.attr({tabindex: '-1', href:'#'});
+					$a.text(item[0]);
+					$li.append($a);
+					$li.on('click', function (e) {
+						e.preventDefault();
+						scope.$apply(function () {
+							_clearContextMenus(e);
+							item[1].call(item, item);
+						});
+					});
+				}
+
+				$ul.append($li);
+			});
+		}
+	}
+
+	function _clearContextMenus(event){
+		if (!event){
+			return;
+		}
+
+		angular.element(event.currentTarget).removeClass('context');
+
+		var els = angular.element(".context-dropdown");
+		angular.forEach(els, function(el){
+			angular.element(el).remove();
+		});
+	}
+
+	var contextMenuItemHeight = 0;
+	function setContextMenuPosition(event){
+		if (contextMenuItemHeight === 0)
+			contextMenuItemHeight = $ul.children(0).height();
+
+		// Why not just call .width() and .height() on the container? Because those calculations cause browsers to reflow
+		// that can cause IE10 to take 200ms to render a context menu.
+		var cmWidth = 150;
+		var cmHeight = contextMenuItemHeight * $ul.children().length;
+		var startX = event.pageX + cmWidth >= window.innerWidth ? event.pageX - cmWidth : event.pageX;
+		var startY = event.pageY + cmHeight >= window.innerHeight ? event.pageY - cmHeight : event.pageY;
+
+		$ul.css({
+			display: 'block',
+			position: 'absolute',
+			left: startX,
+			top: startY,
+			'min-width': cmWidth
+		});
+	}
+}]]></link>
+        <name>cisco_dataTable</name>
+        <option_schema>[{"hint":"If enabled, show the list filter in the breadcrumbs of the data table","name":"enable_filter","default_value":"false","section":"Behavior","label":"Enable Filter","type":"boolean"}]</option_schema>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+
+	var sn_logger=new Cisco_SNLogger();
+	data.has_itil_role=gs.hasRole('itil');
+	var daoScript = new Cisco_DAOScript();
+	data.page_id=$sp.getParameter('id');
+	if (!input) // asynch load list
+		return;
+
+	data.msg = {};
+	data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
+	data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
+
+	data.title = options.title || input.title;
+
+	/*
+	 * data.table = the table
+	 * data.p = the current page starting at 1
+	 * data.o = the order by column
+	 * data.d = the order by direction
+	 * data.keywords = the keyword search term
+	 * data.list = the table data as an array
+	 * data.invalid_table = true if table is invalid or if data was not succesfully fetched
+	 * data.table_label = the table's display name. e.g. Incident
+	 * data.table_plural = the table's plural display name. e.g. Incidents
+	 * data.fields = a comma delimited list of field names to show in the data table
+	 * data.column_labels = a map of field name -> display name
+	 * data.window_size = the number of rows to show
+	 * data.filter = the encoded query
+	 */
+	// copy to data[name] from input[name] || option[name]
+	optCopy(['table', 'p', 'o', 'd', 'filter', 'filterACLs', 'fields', 'keywords', 'view']);
+	optCopy(['relationship_id', 'apply_to', 'apply_to_sys_id', 'window_size']);
+	if (!data.table) {
+		data.invalid_table = true;
+		data.table_label = "";
+		return;
+	}
+
+	if (!data.fields) {
+		if (data.view)
+			data.fields = $sp.getListColumns(data.table, data.view);
+		else
+			data.fields = $sp.getListColumns(data.table);
+	}
+
+	data.view = data.view || 'mobile';
+	data.table = data.table || $sp.getValue('table');
+	data.filter = data.filter || $sp.getValue('filter');
+	data.keywords = data.keywords || $sp.getValue('keywords');
+	data.p = data.p || $sp.getValue('p') || 1;
+	data.p = parseInt(data.p);
+	data.o = data.o || $sp.getValue('o') || $sp.getValue('order_by');
+	data.d = data.d || $sp.getValue('d') || $sp.getValue('order_direction');
+	data.page_index = data.p - 1;
+	data.show_new = data.show_new || options.show_new;
+	var windowSize = data.window_size || $sp.getValue('maximum_entries') || 20;
+	windowSize = parseInt(windowSize);
+	if (isNaN(windowSize) || windowSize < 1)
+		windowSize = 20;
+	data.window_size = windowSize;
+
+	var gr;
+	if (gs.getProperty("glide.security.ui.filter") == "true") {
+		gr = new FilteredGlideRecord(data.table);
+		gr.applyRowSecurity();
+	} else
+		gr = new GlideRecordSecure(data.table);
+	if (!gr.isValid()) {
+		data.invalid_table = true;
+		data.table_label = data.table;
+		return;
+	}
+	
+	data.canCreate = gr.canCreate();
+	data.newButtonUnsupported = data.table == "sys_attachment";
+	data.table_label = gr.getLabel();
+	//data.table_plural = gr.getPlural();
+
+	if (data.filter) {
+
+		if (data.filterACLs)
+			gr = $sp.addQueryString(gr, data.filter);
+		else
+			gr.addEncodedQuery(data.filter);
+	}
+
+	if (data.keywords){
+		gr.addQuery('123TEXTQUERY321', data.keywords);
+		data.keywords = null;
+	}
+
+	data.filter = gr.getEncodedQuery();
+	if(data.filter.includes("health")){
+		gs.addErrorMessage("Health Filter is not supported.");
+		data.filter="";
+	}
+	if(data.page_id=='cisco_incidents')
+	{
+		gr.addEncodedQuery(daoScript.property.incidentFilter);
+		gr.addQuery(data.filter)
+	}
+
+	if(data.page_id=='cisco_servers')
+	{
+		gr.addEncodedQuery('operational_status!=6');
+		gr.addQuery(data.filter)
+	}
+
+	if(data.page_id=='cisco_hx')
+	{
+		gr.addEncodedQuery('operational_status!=6');
+		gr.addQuery(data.filter)
+	}	
+
+	if(data.page_id=='cisco_fi')
+	{
+		gr.addEncodedQuery('operational_status!=6');
+		gr.addQuery(data.filter)
+	}
+
+
+
+	//customization form
+	if(data.page_id.includes("form")){
+		var item_id=$sp.getParameter('sys_id');
+		var items_table=$sp.getParameter('table');
+		try{
+			sn_logger.debug('cisco_dataTable : inside gliderecord to fetch records');
+			var itemsGR=new GlideRecordSecure(items_table);
+			itemsGR.get(item_id);
+
+
+			if(data.page_id=='cisco_hx_form')
+			{		
+				gr.addEncodedQuery('operational_status!=6');
+				gr.addEncodedQuery("tagsLIKE"+itemsGR.name+'');
+			}
+			else if(data.page_id=='cisco_fi_form')
+			{		
+				gr.addEncodedQuery('operational_status!=6');
+				gr.addEncodedQuery("device_moid="+itemsGR.device_moid+'');
+			}
+
+		}catch(e){
+			sn_logger.error('cisco_dataTable : '+e);
+		}
+	}
+
+	if (data.relationship_id) {
+		var rel = GlideRelationship.get(data.relationship_id);
+		var target = new GlideRecordSecure(data.table);
+		var applyTo = new GlideRecordSecure(data.apply_to);
+		applyTo.get("sys_id", data.apply_to_sys_id);
+		rel.queryWith(applyTo, target); // put the relationship query into target
+		gr.addEncodedQuery(target.getEncodedQuery()); // get the query the relationship made for us
+	}
+
+	if (data.o){
+		if (data.d == "asc")
+			gr.orderBy(data.o);
+		else
+			gr.orderByDesc(data.o);
+	}
+
+	data.window_start = data.page_index * data.window_size;
+	data.window_end = (data.page_index + 1) * data.window_size;
+	gr.chooseWindow(data.window_start, data.window_end);
+	gr._query();
+
+	data.row_count = gr.getRowCount();
+	data.num_pages = Math.ceil(data.row_count / data.window_size);
+	data.column_labels = {};
+	data.fields_array = data.fields.split(',');
+
+	// use GlideRecord to get field labels vs. GlideRecordSecure
+	var grForLabels = new GlideRecord(data.table);
+	for (var i in data.fields_array) {
+		var field = data.fields_array[i];
+		var ge = grForLabels.getElement(field);
+		if (ge == null)
+			continue;
+
+		data.column_labels[field] = ge.getLabel();
+	}
+
+	data.list = [];
+	while (gr._next()) {
+		var record = {};
+		$sp.getRecordElements(record, gr, data.fields);
+		/*
+		if (gr instanceof FilteredGlideRecord) {
+			// FilteredGlideRecord doesn't do field-level
+			// security, so take care of that here
+			for (var f in data.fields_array) {
+				var fld = data.fields_array[f];
+				if (!gr.isValidField(fld))
+					continue;
+
+				if (!gr[fld].canRead()) {
+					record[fld].value = null;
+					record[fld].display_value = null;
+				}
+			}
+		}
+		*/
+		record.sys_id = gr.getValue('sys_id');
+		if(data.fields.includes('health')){
+			record.health.display_value=daoScript.getHealth(record.sys_id)+'';
+			record.health.value=daoScript.getHealth(record.sys_id)+'';
+		}
+		data.list.push(record);
+	}
+
+	data.enable_filter = (input.enable_filter == true || input.enable_filter == "true" ||
+												options.enable_filter == true || options.enable_filter == "true");
+	var breadcrumbWidgetParams = {
+		table: data.table,
+		query: data.filter,
+		enable_filter: "true"
+	};
+	data.filterBreadcrumbs = $sp.getWidget('widget-filter-breadcrumbs', breadcrumbWidgetParams);
+
+	// copy to data from input or options
+	function optCopy(names) {
+		names.forEach(function(name) {
+			data[name] = input[name] || options[name];
+		})
+	}
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-02-20 09:18:20</sys_created_on>
+        <sys_id>67c4db28db7b6300a4e47befbf9619e1</sys_id>
+        <sys_mod_count>499</sys_mod_count>
+        <sys_name>cisco_dataTable</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_67c4db28db7b6300a4e47befbf9619e1</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-07-04 07:18:05</sys_updated_on>
+        <template><![CDATA[<div class="panel b">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- header -->
+  <div class="panel-heading form-inline" ng-hide="options.hide_header">
+    <div style="border: none;" class="filter-breadcrumbs">
+      <sp-widget class="widget" widget="data.filterBreadcrumbs"></sp-widget>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  
+  <!-- body -->
+  <div class="panel-body">
+    <h2 class="sr-only data-table-title">{{data.title || data.table_plural}} ${table} - ${page} {{data.p}}</h2>
+    <div class="alert alert-info" ng-if="!data.list.length && !data.num_pages && !data.invalid_table && !loadingData">
+      ${No records in {{data.table_label}} <span ng-if="data.filter">using this filter</span>}
+    </div>
+    <div class="alert alert-info" ng-if="loadingData">
+      <fa name="spinner" spin="true"></fa> ${Loading data}...
+    </div>
+    <table class="table table-responsive content-table" ng-if="data.list.length">
+      <thead>
+        <tr>
+          <th class="sr-only"></th>
+          <th  ng-repeat="field in data.fields_array track by $index" ng-click="setOrderBy(field)" tabindex="0">
+            <div class="th-title" style="float:left !important;padding-left:7px;" aria-label="${Sort by } {{data.column_labels[field]}}">{{data.column_labels[field]}}</div>
+            <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]" aria-label="${Sorted by } {{data.column_labels[field]}} {{data.d == 'asc' ?  '${Ascending}': '${Descending}' }}"></i>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody >
+        <tr class="table_row" ng-repeat="item in data.list track by item.sys_id">
+          <td class="sr-only" tabindex="0" role="link" ng-click="go(data.table, item)" aria-label="${Open record}"></td>
+          <td  role="text" aria-label="{{item[field].display_value}}" class="pointer" ng-class="{selected: item.selected}" ng-click="go(data.table, item)" ng-repeat="field in data.fields_array" data-field="{{field}}"  data-th="{{data.column_labels[field]}}">
+            <span ng-if="field!='severity' && field!='incident' && field!='health' && field!='component' && field!='message' && field!='short_description' "><i class="fa fa-circle incident-state-{{item[field].value}}" style="font-size:12px" ng-if="field=='state'" }></i> &nbsp; {{item[field].display_value}}</span>
+            <span ng-if="field=='component' || field=='message' || field=='short_description'" ng-attr-title='{{item[field].display_value}}'>{{item[field].display_value}}</span>
+            
+
+            <span ng-if="field=='severity' &&  c.data.page_id!='cisco_alarms'">{{item[field].display_value}}</span>
+            
+            <span ng-if="(field=='severity'|| field=='health') && (item[field].display_value=='Critical') && (c.data.page_id=='cisco_alarms'||c.data.page_id=='cisco_servers'||c.data.page_id=='cisco_hx'||c.data.page_id=='cisco_fi'||c.data.page_id=='cisco_hx_form'||c.data.page_id=='cisco_fi_form')" class="health-status-critical">Critical &nbsp; &nbsp;<i style="font-size:12px" class="fa">&#xf00d;</i></span>
+            
+            <span ng-if="(field=='severity'|| field=='health')  && (item[field].display_value=='Warning') && (c.data.page_id=='cisco_alarms'||c.data.page_id=='cisco_servers'||c.data.page_id=='cisco_hx'||c.data.page_id=='cisco_fi'||c.data.page_id=='cisco_hx_form'||c.data.page_id=='cisco_fi_form')" class="health-status-warning">Warning &nbsp; <i style="font-size:12px" class="fa">&#xf071;</i></span>
+            
+            <span ng-if="(field=='severity'|| field=='health')  && (item[field].display_value=='Info') && (c.data.page_id=='cisco_alarms'||c.data.page_id=='cisco_servers'||c.data.page_id=='cisco_hx'||c.data.page_id=='cisco_fi'||c.data.page_id=='cisco_hx_form'||c.data.page_id=='cisco_fi_form')" class="health-status-info">Info &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<i style="font-size:13px" class="fa">&#xf129;</i></span>
+            
+            <span ng-if="(field=='severity'|| field=='health') && (item[field].display_value=='Cleared'||item[field].display_value=='Healthy') && (c.data.page_id=='cisco_alarms'||c.data.page_id=='cisco_servers'||c.data.page_id=='cisco_hx'||c.data.page_id=='cisco_fi'||c.data.page_id=='cisco_hx_form'||c.data.page_id=='cisco_fi_form')" class="health-status-cleared"><span ng-if="item[field].display_value=='Cleared'">Cleared</span><span ng-if="item[field].display_value=='Healthy'">Healthy</span> &nbsp; <i style="font-size:12px" class="fa">&#xf00c;</i></span>
+            
+            <a style="color:#097DBC;font-weight:600;" ng-hide="!c.data.has_itil_role" ng-if="field=='incident' && item[field].label=='Incident' && item[field].display_value  && (c.data.page_id=='cisco_alarms'||c.data.page_id=='cisco_servers'||c.data.page_id=='cisco_hx'||c.data.page_id=='cisco_fi'||c.data.page_id=='cisco_hx_form'||c.data.page_id=='cisco_fi_form')" ng-href="?id=cisco_incidents_form&sys_id={{item[field].value}}">{{item[field].display_value}}</a>
+          </td>
+        </tr>  
+      </tbody>
+
+    </table>
+    <div ng-class="{'pruned-msg-filter-pad': (!options.show_breadcrumbs || !data.filter) && !data.list.length}" class="pruned-msg" ng-if="rowsWerePruned()">
+      <span ng-if="rowsPruned == 1">${{{rowsPruned}} row removed by security constraints}</span>
+      <span ng-if="rowsPruned > 1">${{{rowsPruned}} rows removed by security constraints}</span>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="panel-footer" ng-if="data.row_count" style="background-color: #F6F7F8;box-shadow: none; border-radius: 0px;">
+    <div class="btn-toolbar m-r pull-right" style="display:inline;">
+      <!----------------------------------Pagination------------------------------>
+      <div class="pagination-container">
+        <div class="inline error_msg" ng-if="c.data.error_msg">
+          &nbsp;&nbsp;{{c.data.error_msg}}
+        </div>
+        <div class="pagination">
+          <li class="pagination-item item-left">
+            <a ng-disabled="data.p == 1"  class="btn btn-default" href="" ng-class="{disabled : c.data.current_record < c.data.window}" ng-click="setPageNum(1)" aria-label="${Previous page}"><i class="fa">&#xf0d9;&#xf0d9;</i></a>
+          </li>
+          <li class="pagination-item item-left">
+            <a ng-disabled="data.p == 1"  class="btn btn-default" href="" ng-click="setPageNum(data.p - 1)" aria-label="${Previous page}"><i class="fa">&#xf0d9;</i></a>
+          </li>
+          <li class="pagination-item item-search" style="padding-top:0px "><input id="input-search" type="text" ng-model="c.input"  placeholder="${{{data.p}} of {{data.num_pages}}}"></li>
+          <li class="pagination-item item-right">
+            <a ng-disabled="data.p == data.num_pages"  class="btn btn-default" href="" ng-click="setPageNum(data.num_pages)" aria-label="${Next page}"><i class="fa">&#xf0da;&#xf0da;</i></a>
+          </li>
+          <li class="pagination-item item-right">
+            <a ng-disabled="data.p == data.num_pages"  class="btn btn-default" href="javascript:void(0)" ng-click="setPageNum(data.p + 1)" aria-label="${Next page}"><i class="fa">&#xf0da;</i></a>
+          </li>
+          <li class="pagination-item item-right search-button"><a class="fa fa-search btn btn-default" id="search-button"  href="javascript:void(0)" ng-click="setPageNum(c.input); c.input = undefined;" aria-label="${Next page}"></a></li>
+        </div>
+      </div>
+      <!----------------------------------Pagination------------------------------>
+      </div>
+    <div style="padding-top:17px;">{{c.data.row_count}} <span ng-if="c.data.row_count>1">Items Found</span><span ng-if="c.data.row_count<=1">Item Found</span>
+    		
+      
+    </div>
+      <span class="clearfix"></span>
+    </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

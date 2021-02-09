@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_caci_cisco_inter.Cisco_UpdateAlarmService</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>Cisco_UpdateAlarmService</name>
+        <script><![CDATA[var Cisco_UpdateAlarmService = Class.create();
+Cisco_UpdateAlarmService.prototype = {
+	initialize: function() {
+		this.logger = new Cisco_SNLogger();
+		this.appUtil = new Cisco_AppUtil();
+	},
+	isJSONempty:function(jsonObj){
+		try{
+			this.logger.debug("Inside Cisco_UpdateAlarmService.isJSONempty checking empty  json .");
+			for(var key in jsonObj) {
+				if(jsonObj.hasOwnProperty(key))
+					return false;
+			}
+			return true;
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_UpdateAlarmService.isJSONempty while checking empty json = "+e);
+		}
+
+	},
+	//create filter based on the CI items for alarms with deletion true
+	createDeletedAlarmsCIfilter: function( jsonObj ){
+		try{
+			this.logger.debug("Inside Cisco_UpdateAlarmService.createDeletedAlarmsCIfilter creating CI filter based on deleted alarms.");
+
+			var moid_array = Object.keys(jsonObj);
+			var filterString = '';
+			if( moid_array[0] ){
+				filterString = filterString+"Moid eq "+"'"+moid_array[0]+"'";
+			}
+			for( var i=1; i<moid_array.length; i++ ){
+				filterString = filterString+" or Moid eq "+"'"+moid_array[i]+"'";
+			}
+			var encodedFilter = encodeURI(filterString.trim());
+
+			var filter="(" + encodedFilter + ")";
+			return filter;
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_UpdateAlarmService.createDeletedAlarmsCIfilter while creating CI filter based on deleted alarms. Error ="+e);
+		}
+
+
+	},
+
+	//check if CI exixts on intersight
+	checkCIexistence:function(filter, jsonObj,accountReference){
+		try{
+			this.logger.debug("Inside Cisco_UpdateAlarmService.checkCIexistence checking CI existence based on deleted alarms.");
+
+			var response;
+			var endPoint = '';
+			var CIjson=jsonObj;
+
+			var CItables=[this.appUtil.configuration.api.fetchServers,this.appUtil.configuration.api.fetchFIs,this.appUtil.configuration.api.fetchHX];
+			for(var  i in CItables){
+				endPoint = CItables[i] + "$filter="+filter;
+				CIjson=this.updateCIjson(endPoint, CIjson, accountReference);
+			}
+			return CIjson;
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_UpdateAlarmService.checkCIexistence while checking CI existence based on deleted alarms. Error ="+e);
+		}
+
+	},
+
+	//update json object
+	updateCIjson:function(endPoint,jsonObj,accountReference){
+		try{
+			this.logger.debug("Inside Cisco_UpdateAlarmService.updateCIjson updating CI json based on its existence.");
+
+			response = this.appUtil.makeApiCall('GET', endPoint, '', accountReference);
+			updatedJSONobj = this.markExistingCI(response.getBody(), jsonObj);	
+			return updatedJSONobj;
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_UpdateAlarmService.updateCIjson while updating CI json based on its existence. Error ="+e);
+		}
+
+	},
+
+	//mark true if CI exists 
+	markExistingCI:function(response, ci_json){
+		try{
+			this.logger.debug("Inside Cisco_UpdateAlarmService.markExistingCI marking CI json based on its existence.");
+
+			var results = JSON.parse(response).Results;
+			for(var i in results){
+				ci_json[results[i].Moid] = 'true';
+			}
+			return ci_json;
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_UpdateAlarmService.markExistingCI while marking CI json based on its existence. Error ="+e);
+		}
+
+	},
+
+	type: 'Cisco_UpdateAlarmService'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-07-12 10:16:11</sys_created_on>
+        <sys_id>f0d2f29e1b6233009502986cbc4bcb2b</sys_id>
+        <sys_mod_count>22</sys_mod_count>
+        <sys_name>Cisco_UpdateAlarmService</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_include_f0d2f29e1b6233009502986cbc4bcb2b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-07-16 08:50:56</sys_updated_on>
+    </sys_script_include>
+</record_update>

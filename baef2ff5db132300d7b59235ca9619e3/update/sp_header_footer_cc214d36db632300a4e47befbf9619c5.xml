@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_header_footer">
+    <sp_header_footer action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($rootScope, $scope, snRecordWatcher, spUtil, $location, $uibModal, cabrillo, $timeout, $window) {
+$scope.loadingIndicator = $rootScope.loadingIndicator;
+	var c=this;
+	$scope.avatarProfile = {
+		userID: $scope.user.sys_id,
+		name: $scope.user.name,
+		initials: $window.NOW.user_initials
+	};
+	
+	$scope.$on('sp_loading_indicator', function(e, value) {
+			$scope.loadingIndicator = value;
+   });
+	
+	$scope.importrecords=function(){
+		
+		c.data.action="Populate JSON";
+		c.server.update().then(function(){
+			c.data.action="";
+		})
+	}
+	
+	$timeout(function(){
+		//alert(c.data.pagename);
+		$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"Dashboard","url":"#"}]);
+	})
+  
+	
+	$('.dropdown-menu').click(function(e) {
+    e.stopPropagation();
+	});
+	
+	if ($window.NOW.user_avatar) {
+		$scope.avatarProfile.userImage = $window.NOW.user_avatar;
+	}
+
+	if (cabrillo.isNative())
+		$scope.isViewNative = true;
+
+	$scope.openPopUp = function() {
+		var url = "$chat_support.do?queueID=" + $scope.data.connect_support_queue_id;
+		var popup = window.open (url, "popup", "width=900, height=600");
+	};
+
+	$scope.openLogin = function () {
+		$scope.modalInstance = $uibModal.open({
+			templateUrl: 'modalLogin',
+			scope: $scope
+		});
+	};
+
+	var xsScreenSize = isXSScreenSize();
+	$scope.showXSAvatar = isXSScreenSize();
+	$scope.showAvatar = !isXSScreenSize();
+	
+	angular.element($window).on('resize', function () {
+		if(xsScreenSize !== isXSScreenSize() && (!$scope.showXSAvatar || !$scope.showAvatar)){
+			$scope.showXSAvatar = true;
+			$scope.showAvatar = true;
+		}	   
+	});
+	
+	
+	function isXSScreenSize() {
+		return $window.matchMedia('(max-width: 767px)').matches;
+	}
+	
+	$rootScope.$on('sp.avatar_changed', function() {
+		$scope.userID = "";
+		$timeout(function(){
+			$scope.userID = $scope.user.sys_id;
+		});
+	});
+
+	$scope.isHomepage = function() {
+		if (!$scope.page.id)
+			return true;
+
+		if ($scope.page.id == $scope.portal.homepage_dv)
+			return true;
+
+		return false;
+	};
+}
+		]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.main_head{
+  font-family: 'Roboto', sans-serif;
+}
+.navbar {
+  transition: 250ms opacity ease-in-out;
+  -webkit-transition: 250ms opacity ease-in-out;
+  border: 0;
+  min-height:49px;
+  height:49px;
+}
+.header-loader {
+	float: left;
+    width: 32px;
+    position: relative;
+    top: 20px;
+    //left: 15px;
+}
+.navbar-header{
+height:50px !important;
+}
+
+@media screen and (max-width: 767px) {
+  .custom-user-icon{
+    position:absolute !important;
+    top:0;
+    right:0;  
+  }
+  .alarm_btn{
+  display:none;
+  }
+  
+}
+
+
+@media screen and (max-width: 425px) {
+.navbar-brand{
+    img{
+    	height:25px;
+    }
+  }
+
+}
+@media screen and (min-width: 767px) {
+  .custom-user-icon{
+  }
+}
+
+.incident-state-7{
+  color:#66BB6A;
+}
+.incident-state-8{
+  color:#000000;
+}
+.incident-state-6{
+  color:#049FD9;
+}
+.incident-state-1{
+  color:#004BAF;
+}
+.incident-state-3{
+  color:#EE5350;
+}
+.incident-state-2{
+  color:#FFA000;
+}
+
+//remove unordered list padding
+ul{
+  padding:0px;
+}
+
+//Dropdown item list
+.item-list{
+  padding:10px;
+  list-style-type:none;
+  font-size:12px;
+}
+.item-list-wrapper :hover{
+background-color:#E0E0E0;
+}
+
+
+.item-keys {
+  padding-left:5%;
+  color: #252525;
+  font-weight:400;
+}
+.item-values {
+  float: right;
+  color: #252525;
+  margin-right:15%;
+}
+
+//Current Selection - Incidents/Alarms
+.current-selection{
+background-color:#049FD9;
+  color:#FFFFFF !important;
+ // border-bottom:2px solid #FFFFFF;
+}
+
+.navbar-avatar{
+float:right !important;
+  margin-left:10px;
+  margin-top:-2px;
+}
+
+//separator line
+.vertical-separator{
+  border-right: 1px solid #C8C8C8;
+  margin-top:15px;
+  height:19px;
+}
+
+//bell-dropdown
+.main-container{
+	min-width:200px;
+  position:absolute;
+  top:109%;
+  right:-3%;
+  background-color:#FFFFFF;
+}
+.list-inline{
+	font-size:14px;
+  font-weight:400;
+  border-bottom:1px solid #5C6176;
+}
+//Alarms and Incident header
+.dropdown_header{
+	color:#363C52;
+  text-align:center;
+  width:99px;
+  height:40px;
+  padding:12px;
+  font-size:12px;
+  font-weight:600;
+}
+
+//navbar class changes -height bgcolor
+.navbar-nav{
+  height:45px !important; 
+}
+.navbar-nav &gt; .open &gt; a:focus{
+background-color:#252833;
+}
+
+.navbar-brand {
+  max-height: 60px;
+  padding: 0;
+  padding-bottom: 1.3rem;
+}
+
+.list-body{
+min-height:100px;
+}
+.navbar-brand img, .navbar-brand span {
+  display: block;
+  max-height: 50px;
+  max-width: 210px;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.navbar-nav {
+margin: 0px;
+  li{
+    a{
+   padding-top:12px !important;
+    }
+  }
+  }
+
+
+/* for mobile app */
+.navbar-inverse {
+  background-color: #049FD9;
+}
+
+nav{
+ margin-bottom: 0px;
+ border-radius: 0px;
+}
+
+.navbar-collapse{
+padding-right: 0px;
+}
+
+// PRB711244: Dropdown menu is scrollable when too many items
+.scrollable-dropdown {
+  max-height: 80vh;
+  overflow: auto;
+  height: auto;
+}
+
+
+.navbar-header{
+width:65%;
+  display:flex;
+}
+
+//breadcrumbs 
+.navbar-breadcrumbs{
+  font-size:13px;
+  font-weight:400;
+  line-height:1em;
+  padding-top:8px;
+  padding-left:3px;
+  color:#fff;
+  a{
+  color:#FFFFFF;
+  }
+}
+
+.is-native {
+ .scrollable-dropdown {
+  max-height: 100vh;
+  overflow: scroll;
+  height: auto;
+	}
+}
+
+//controlling height of toggle button wrt navbar height
+.dropdown-toggle {
+height:49px !important;
+}
+
+/* PRB923910: Fix for Service Portal - Header Poorly Aligned in Safari */
+@media screen and (min-width: 768px) {
+  .navbar-collapse {
+    display: flex !important;
+  }
+  .navbar-header{
+    width:65%;
+    display:flex;
+  }
+}
+@media screen and (max-width: 768px) {
+ .navbar-header{
+   .navbar-breadcrumbs{
+   	font-size:10px;
+   }
+    width:80%;
+    display:flex;
+  }
+}
+
+//View All button css
+.list-footer{
+text-align:center;
+  padding:10px;
+	background-color: #FFFFFF;
+  border-top:1px solid #5C6176;
+	box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  a{
+  color:#363C52;
+  }
+ }
+
+
+//css for bell icon
+.alarm_btn{
+  height:44px !important;
+  //background-color:#363C52;
+	color:#ffffff;
+}
+
+//css for user display name
+.display-name{
+  font-size:13px;
+  font-weight:400;
+	line-height:14px;
+  color:#FFFFFF;
+}
+
+//bootstrap dropdown menu
+.dropdown-menu{
+  margin-top:0px !important;
+  min-width:200px;
+  padding:0px !important; 
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id/>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_header</name>
+        <option_schema/>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[// Defines the support queue ID that will be linked to by the Live Chat link in header
+data.pagename=$sp.getParameter('id');
+var sn_logger=new Cisco_SNLogger();
+var daoScript = new Cisco_DAOScript();
+
+//show error if user does not have itil role
+var show_error=gs.getSession().getClientData('show_error');
+if(!gs.hasRole('itil') && show_error!='false'){
+	gs.addErrorMessage('Logged in user does not have the pre-requisite "ITIL" role. Some functionalities may not be available.')
+	gs.getSession().putClientData('show_error','false');
+}
+
+data.connect_support_queue_id = $sp.getValue('sp_chat_queue');
+data.login_page = $sp.getValue('login_page');
+data.profileBtnMsg = gs.getMessage("User options");
+data.selected="cisco_alarms"
+var menu = $sp.getValue("sp_rectangle_menu");
+data.menu = $sp.getWidgetFromInstance(menu);
+if (data.menu && data.menu.data) {
+	data.menu.data.replace = true;
+	// Hide login if menu already has link to login
+	data.hasLogin = false;
+	if (data.menu.data.menu.items) {
+		for(var i in data.menu.data.menu.items) {
+			var item = data.menu.data.menu.items[i];
+			if (item.type == 'page' && item.sp_page == data.login_page)
+				data.hasLogin = true;
+		}
+	}
+}
+
+data.json={"cisco_alarms":[],"cisco_incidents":[]};
+
+function populate_json(tablename,group_by){
+	//Gliderecord query
+	try{
+		sn_logger.debug('cisco_header : Inside glideaggregate');
+		var gr = new GlideAggregate(tablename); //GlideAggregate query
+		gr.addAggregate('count'); //Count aggregate (only necessary for a count of items of each OS)
+		if(tablename=='incident'){
+			gr.addEncodedQuery(daoScript.property.incidentFilter);
+		}
+		gr.orderByAggregate('count'); //Count aggregate ordering
+		gr.groupBy(group_by); //Group aggregate by the 'os' field
+		gr.query();
+		while(gr.next()){
+			var item_count = gr.getAggregate('count'); //Get the count of the OS group
+			if(tablename=='incident'){
+
+				data.json['cisco_incidents'].push({
+					"name":gr.state.getDisplayValue(),
+					"count":item_count,
+					"filter":"?id=cisco_incidents&filter=state="+gr.state,
+					"state":gr.state+''
+				});
+			}
+			else if(tablename==daoScript.table.alarms){
+				data.json['cisco_alarms'].push({
+					"name":gr.severity.getDisplayValue(),
+					"count":item_count,
+					"filter":"?id=cisco_alarms&filter=severity="+gr.severity
+				});
+			}
+	}	
+}catch(e){
+	sn_logger.error('cisco_header : '+e);
+}
+}
+
+
+if(input && input.action=="Populate JSON"){
+	populate_json('incident','state');
+	populate_json('x_caci_cisco_inter_cisco_alarms','severity');
+}
+
+]]></script>
+        <servicenow>false</servicenow>
+        <static>false</static>
+        <sys_class_name>sp_header_footer</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-14 12:04:55</sys_created_on>
+        <sys_id>cc214d36db632300a4e47befbf9619c5</sys_id>
+        <sys_mod_count>349</sys_mod_count>
+        <sys_name>cisco_header</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_header_footer_cc214d36db632300a4e47befbf9619c5</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-26 15:27:59</sys_updated_on>
+        <template><![CDATA[
+<div class="main_head">
+  <nav class="navbar-inverse" ng-class="::{'navbar':!isViewNative, 'is-native': isViewNative}"
+       role="navigation">
+    <!--Navbar Header-->
+    <div ng-show="::!isViewNative" class="navbar-header">
+      <a class="navbar-brand" ng-if="::!portal.logo" href="?id={{::portal.homepage_dv}}"><span>{{::portal.title}}</span></a>
+      <a class="navbar-brand navbar-brand-logo" ng-if="::portal.logo" href="?id={{::portal.homepage_dv}}" aria-label="${Go to homepage}">
+        <img ng-src="{{::portal.logo}}" title="ServiceNow" role="presentation" alt="${Portal Logo}" />
+      </a>    
+      <!--embedding the breadcrumbs widget-->
+      <div class="navbar-breadcrumbs">
+        <widget id="cisco_breadcrumbs"></widget>
+			</div>
+    </div>
+   
+    
+    <!--Loader Page -->
+   
+    <ul class="nav navbar-nav navbar-right"> 
+       <div class="header-loader" ng-show="loadingIndicator">
+      <div class="hidden-xs sp-loading-indicator la-sm">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    
+      <!-- Alarm Icon -->
+      <li class="alarm_btn dropdown" ng-click="importrecords()">
+        <a  ng-href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+          <img src="ciscoalarm.png" width="13" height="14"/>
+        </a>
+        <div class="dropdown-menu main-container">
+          <ul class="list-inline">
+            <li ng-click="c.data.selected='cisco_alarms'" class="dropdown_header" ng-class="{'current-selection':(c.data.selected=='cisco_alarms')}">Alarms</li>
+            <li ng-click="c.data.selected='cisco_incidents'" class="dropdown_header" ng-class="{'current-selection':(c.data.selected=='cisco_incidents')}">Incidents</li>  
+          </ul>
+
+          <ul class="list-body">
+            <div class="item-list-wrapper" ng-repeat="item in c.data.json[c.data.selected]">
+              <a ng-href="{{item.filter}}"> 
+                <li class="item-list" >
+                  <span class="item-keys"><i ng-if="c.data.selected=='cisco_incidents'" class="fa fa-circle incident-state-{{item.state}}"></i>&nbsp;&nbsp;{{item.name}}</span>
+                  <span class="item-values">{{item.count}}</span>
+                </li>
+              </a>
+            </div>
+            <h5 style="padding:10px;text-align:center;color:#000000" ng-if="c.data.json[c.data.selected].length==0">
+              No data found
+            </h5>
+          </ul>
+          <ul class="list-footer">
+            <li><a ng-href="?id={{c.data.selected}}">View All</a></li>  
+          </ul>
+        </div>
+      </li> 
+      
+      <!-- separator -->
+      <li class="vertical-separator">
+      </li>
+      
+      <!-- Logged out header -->
+      <ul ng-if="::(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav " role="presentation">
+        <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
+      </ul>
+     
+      <!-- Logged in user info -->
+      <ul ng-if="::user.logged_in" class="nav navbar-nav custom-user-icon" role="menubar">
+        <li ng-if="showAvatar" class="hidden-xs dropdown" role="presentation">
+          <a href class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}" aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown"  role="menuitem" aria-haspopup="true">
+           <!-- <span class="navbar-avatar" aria-hidden="true"><sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>-->
+            <span class="visible-lg-inline display-name">{{::user.name}}</span>
+            <span class="navbar-avatar"><img src="user.png" width="16" height="14"/></span>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-label="{{::data.profileBtnMsg}}">
+           <!-- <li role="presentation"><a tabindex="-1" ng-href="?id=cisco_userProfile&sys_id={{::user.sys_id}}" role="menuitem">${Profile}</a></li> -->
+            <li style="padding-bottom:10px;" ng-if="::!isViewNative" role="presentation"><a tabindex="-1" href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+          </ul>
+        </li>
+        <li ng-if="::!isViewNative" class="visible-xs-block" role="presentation"><a role="menuitem" href="{{::portal.logoutUrl}}">${Logout}</a></li>
+      </ul>
+    </ul>   
+  </nav>
+</div>]]></template>
+    </sp_header_footer>
+</record_update>

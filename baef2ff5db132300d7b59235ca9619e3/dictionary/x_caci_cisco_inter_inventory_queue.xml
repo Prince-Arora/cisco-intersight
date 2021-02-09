@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Cisco Import Queue" max_length="40" name="x_caci_cisco_inter_inventory_queue" sizeclass="0" type="collection">
+        <element attributes="edge_encryption_enabled=true" label="Intersight" max_length="32" name="intersight" reference="x_caci_cisco_inter_intersight_authentication" type="reference"/>
+        <element label="Parameter" max_length="1000" name="parameter" type="string"/>
+        <element label="Payload" max_length="10000" name="payload" type="string"/>
+        <element choice="3" default="ready" label="State" max_length="1000" name="state" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Wait" sequence="0" value="wait"/>
+                <element inactive_on_update="false" label="Ready" sequence="1" value="ready"/>
+                <element inactive_on_update="false" label="In Progress" sequence="2" value="processing"/>
+                <element inactive_on_update="false" label="Completed" sequence="3" value="completed"/>
+                <element inactive_on_update="false" label="Error" sequence="4" value="error"/>
+            </choice>
+        </element>
+        <element label="Topic" max_length="1000" name="topic" type="string"/>
+        <index name="index">
+            <element name="intersight"/>
+        </index>
+    </element>
+</database>

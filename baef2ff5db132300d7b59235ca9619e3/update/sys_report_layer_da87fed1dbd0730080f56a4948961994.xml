@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_report_layer">
+    <sys_report_layer action="INSERT_OR_UPDATE">
+        <aggregate>COUNT</aggregate>
+        <aggregation_source/>
+        <allow_data_label_overlap>false</allow_data_label_overlap>
+        <bar_unstack>false</bar_unstack>
+        <color display_value="ForestGreen">65b3027ca9fe3dba00d5b649d600fe09</color>
+        <color_palette display_value="Greens dark to light (5)">a0f81f19d7100200b96d45a3ce61039f</color_palette>
+        <colors/>
+        <compute_percent>aggregate</compute_percent>
+        <custom_config>{"transforms":[{"transform":{"transform":"Reference","name":"chart-subjects"}}]}</custom_config>
+        <field/>
+        <filter table="incident">closed_atISNOTEMPTY^cmdb_ci.sys_class_nameINx_caci_cisco_inter_cisco_fibre_interconnects,x_caci_cisco_inter_cisco_hyperflex_clusters,x_caci_cisco_inter_cisco_servers^ORshort_descriptionSTARTSWITHIntersight Alarm:<item endquery="false" field="closed_at" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item display_value="x_caci_cisco_inter_cisco_fibre_interconnects,x_caci_cisco_inter_cisco_hyperflex_clusters,x_caci_cisco_inter_cisco_servers" endquery="false" field="cmdb_ci.sys_class_name" goto="false" newquery="false" operator="IN" or="false" value="x_caci_cisco_inter_cisco_fibre_interconnects,x_caci_cisco_inter_cisco_hyperflex_clusters,x_caci_cisco_inter_cisco_servers"/>
+            <item endquery="false" field="short_description" goto="false" newquery="false" operator="STARTSWITH" or="true" value="Intersight Alarm:"/>
+        </filter>
+        <import_table/>
+        <interval>date</interval>
+        <list_ui_view/>
+        <report display_value="Incidents vs Time">54728641db94330080f56a49489619f2</report>
+        <report_source/>
+        <sequence>2</sequence>
+        <series_name_text>Closed</series_name_text>
+        <set_color>one_color</set_color>
+        <show_2nd_y_axis>false</show_2nd_y_axis>
+        <show_chart_data_label>false</show_chart_data_label>
+        <show_data_label_position_middle>false</show_data_label_position_middle>
+        <show_marker>true</show_marker>
+        <source_type>table</source_type>
+        <style_config/>
+        <sumfield/>
+        <sys_class_name>sys_report_layer</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-19 11:37:17</sys_created_on>
+        <sys_id>da87fed1dbd0730080f56a4948961994</sys_id>
+        <sys_mod_count>13</sys_mod_count>
+        <sys_name>Closed</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_report_layer_da87fed1dbd0730080f56a4948961994</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-26 13:46:07</sys_updated_on>
+        <table>incident</table>
+        <trend_field>closed_at</trend_field>
+        <type>line</type>
+        <use_null_in_trend>false</use_null_in_trend>
+        <y_axis_from/>
+        <y_axis_title/>
+        <y_axis_to/>
+    </sys_report_layer>
+</record_update>

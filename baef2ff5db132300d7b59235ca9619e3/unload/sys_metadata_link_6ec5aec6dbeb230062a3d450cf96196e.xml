@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>unload</directory>
+        <documentkey>c6a5a60adbeb230062a3d450cf96196d</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="x_caci_cisco_inter_intersight_authentication">
+    <x_caci_cisco_inter_intersight_authentication action="INSERT_OR_UPDATE">
+        <access_link/>
+        <account_id/>
+        <account_name/>
+        <api_key_id/>
+        <host_name></host_name>
+        <import_alarms>true</import_alarms>
+        <import_fabric_interconnects>true</import_fabric_interconnects>
+        <import_hyperflex_clusters>true</import_hyperflex_clusters>
+        <imports_servers>true</imports_servers>
+        <log_levels>0</log_levels>
+        <mid_server/>
+        <requires_mid_server>false</requires_mid_server>
+        <secret_key/>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-12 11:27:41</sys_created_on>
+        <sys_id>c6a5a60adbeb230062a3d450cf96196d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>girishgyani</sys_updated_by>
+        <sys_updated_on>2019-02-12 11:27:41</sys_updated_on>
+    </x_caci_cisco_inter_intersight_authentication>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-12 11:28:07</sys_created_on>
+        <sys_id>6ec5aec6dbeb230062a3d450cf96196e</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_metadata_link_6ec5aec6dbeb230062a3d450cf96196e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-02-25 07:37:56</sys_updated_on>
+        <tablename>x_caci_cisco_inter_intersight_authentica</tablename>
+    </sys_metadata_link>
+</record_update>

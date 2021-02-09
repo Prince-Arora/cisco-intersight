@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope,$rootScope,$timeout,$location) {
+  /* widget controller */
+  var c = this;
+	
+	$timeout(function(){
+		$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"HyperFlex Clusters","url":"?id=cisco_hx"},{"label":c.data.hyperflex_name,"url":"#"}]);
+	},10)
+	
+	$scope.isempty=function(data){
+		return (Object.keys(data).length>0) ? true : false;
+	}
+	$scope.$on('data_table.click', function(e, parms){
+		
+		//var p =$scope.data.page_id||'form';
+		var s = {id: parms.id, table: parms.table, sys_id: parms.sys_id, view: 'sp'};
+		
+		var newURL =$location.search(s);
+		
+		spAriaFocusManager.navigateToLink(newURL.url());
+		
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>ul{
+  padding:0;
+list-style-type:none;
+}
+.list-item{
+  padding-top:10px;
+  padding-bottom:10px;
+  
+}
+
+.nodes-container{
+height:712px;
+}
+.main-container{
+ font-family:"Roboto",sans-serif;
+  font-size:14px;
+}
+
+.tags-list{
+		padding:0px !important;
+}
+
+.tag{
+  
+  //padding-right: 7.5px;
+//  padding-left: 7.5px;
+  //height: 24px;
+  //width:10px;
+  padding:5px 10px 5px 10px;
+  margin:2px;
+  min-width:100px;
+  background-color: #ecedf1;
+  border-radius: 3px;
+  overflow: hidden;
+  
+}
+
+.health-status-critical {
+  min-width:100px;
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+  padding: 5px 10px 5px 10px;
+  background-color: #E85454;
+  color:#ffffff;
+}
+
+
+.health-status-warning {
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #FFA000;
+  color:#ffffff;
+}
+
+.health-status-info {
+ 	font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #0095D3;
+  color:#ffffff;
+}
+.health-status-healthy {
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #66BB6A;
+  color:#ffffff;
+}
+.value{
+float:right;
+  text-align:right;
+}
+.key{
+  float:left;
+}
+.details-header{
+background-color:#1F2D3D ;
+  color:#FFFFFF;
+}
+.horizontal-separator{
+width:100%;
+  height:1px;
+  background-color:rgba(80, 85, 107, 0.15000000596046448);
+  margin-top:15px;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>cisco_hyperflex_details</id>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_hyperflex_details</name>
+        <option_schema>[{"name":"type","section":"other","label":"Type","type":"string"}]</option_schema>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var sn_logger=new Cisco_SNLogger();
+	var daoScript = new Cisco_DAOScript();
+	
+	//gliderecord on table in the url
+	try{
+		sn_logger.debug('cisco_hyperflex_details : Inside gliderecord to fetch records');
+		var table=$sp.getParameter('table');
+		var sys_id=$sp.getParameter('sys_id');
+		var hyperflexGR=new GlideRecordSecure(table);
+		hyperflexGR.get(sys_id);
+		data.hyperflex_name=(hyperflexGR.name)?hyperflexGR.name+'':'-';
+		data.hyperflexGR_detail_json={};
+		var details=[];
+		var properties=[];
+		var tags={};
+		if(options.type=="Details"){
+			sn_logger.debug('cisco_hyperflex_details : Inside gliderecord to fetch hx details');
+			details=[
+				{
+					"key":"Name",
+					"value":(hyperflexGR.name)?hyperflexGR.name+'':'-'
+				},
+				{
+					"key":"Health",
+					"value":daoScript.getHealth(hyperflexGR.sys_id)+''
+				},
+				{
+					"key":"Hypervisor Version",
+					"value":(hyperflexGR.hypervisor_version)?hyperflexGR.hypervisor_version+'':'-'
+				},
+				{
+					"key":"HyperFlex Version",
+					"value":(hyperflexGR.hx_version)?hyperflexGR.hx_version+'':'-'
+				},
+				{
+					"key":"Storage Optimization",
+					"value":(hyperflexGR.optimization)?hyperflexGR.optimization+'':'-'
+				},
+				{
+					"key":"Storage Utilization",
+					"value":(hyperflexGR.storage_utilization)?hyperflexGR.storage_utilization+'':'-'
+				},
+				{
+					"key":"Storage Capacity (TB)",
+					"value":(hyperflexGR.storage_capacity)?hyperflexGR.storage_capacity+'':'-'
+				},
+				{
+					"key":"Uptime",
+					"value":(hyperflexGR.uptime)?hyperflexGR.uptime+'':''
+				},
+				{
+					"key":"Converged Node Count",
+					"value":(hyperflexGR.converged_node_count)?hyperflexGR.converged_node_count+'':'-'
+				},
+				{
+					"key":"Compute Node Count",
+					"value":(hyperflexGR.compute_node_count)?hyperflexGR.compute_node_count+'':'-'
+				}];
+		}
+		else if(options.type=="Tags"){
+			sn_logger.debug('cisco_hyperflex_details : Inside gliderecord to fetch hx tags');
+			tags=hyperflexGR.tags;
+		}
+
+		data.hyperflexGR_detail_json.details=details;
+		data.hyperflexGR_detail_json.tags=tags;
+	}catch(e){
+		sn_logger.error('cisco_hyperflex_details : '+e);
+	}
+	
+	var widgetParams = {
+		table: daoScript.table.ciscoServers,
+		fields:"name,health,model_number",
+		window_size: 10,
+		view: 'sp',
+		show_breadcrumbs: true
+	};
+	
+	data.dataTableWidget = $sp.getWidget('cisco_dataTable', widgetParams);
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-07 09:56:00</sys_created_on>
+        <sys_id>e94d64eddb84b300a4e47befbf9619ec</sys_id>
+        <sys_mod_count>153</sys_mod_count>
+        <sys_name>cisco_hyperflex_details</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_e94d64eddb84b300a4e47befbf9619ec</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-20 14:22:21</sys_updated_on>
+        <template><![CDATA[<div class="main-container">
+  <div class="panel panel-default">
+  <div class="panel-heading details-header">
+    <h3 class="panel-title">{{c.options.type}}</h3>
+  </div>
+  <div class="panel-body" ng-class="{'nodes-container':c.options.type=='Nodes','details-container':c.options.type=='Details'}">
+    <div ng-if="c.options.type=='Nodes'">
+      <sp-widget ng-if="data.dataTableWidget" widget="data.dataTableWidget"></sp-widget>
+    </div>
+    <ul>
+      <li ng-if="c.options.type=='Details'" ng-repeat="item in c.data.hyperflexGR_detail_json.details" class="row list-item">
+        <div class="key col-md-6">{{item.key}}</div>
+        <div class="value col-md-6" ng-if="item.key!='Health'">{{item.value}}</div>
+        <div ng-if="item.key=='Health' && item.value=='Critical'" class="value col-md-6"> <span class="health-status-critical">Critical &nbsp<i style="font-size:12px" class="fa">&#xf00d;</i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Warning'" class="value col-md-6"> <span class="health-status-warning">Warning &nbsp <i style="font-size:12px" class="fa">&#xf071;</i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Healthy'" class="value col-md-6"><span class="health-status-healthy">Healthy &nbsp <i style="font-size:12px" class="fa">&#xf00c;</i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Info'" class="value col-md-6"><span class="health-status-info">Info &nbsp <i style="font-size:12px" class="fa">&#xf00c;</i></span></div>
+        <br/>
+        <div ng-if="item.key=='Health'||item.key=='Uptime'" class="horizontal-separator col-md-12">
+        </div>
+      </li>
+      <div ng-init="render = isempty(c.data.hyperflexGR_detail_json.tags)" ng-if="c.options.type=='Tags' " class="list-inline">
+        <li class="tags-list" ng-if="render" ng-repeat="(key, value) in c.data.hyperflexGR_detail_json.tags">
+          <div class="tag" >
+            <span>{{key}}</span>
+            <span>: {{value}}</span>
+          </div>
+        </li> 
+        <h5 ng-if="!render" style="text-align:center">
+          No Tags Found
+        </h5>
+      </div>
+    </ul>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

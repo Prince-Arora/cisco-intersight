@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope,$rootScope,$timeout) {
+  /* widget controller */
+  var c = this;
+	
+	//Updating Breadcrumbs
+	$timeout(function(){
+			$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"Incidents","url":"?id=cisco_incidents"},{"label":c.data.incident_number,"url":"#"}]);
+
+	},10)
+	
+	
+	//Update the record variables 
+	$scope.saveRecord=function(state,onhold_reason,comments,res_code,res_notes){
+		if(state=='3'){
+			if(!onhold_reason || onhold_reason==0){
+				alert("On Hold Reason field left blank");
+				return;
+			}else if(onhold_reason=='1'){
+				if(!comments){
+					alert("Additional Comments Required");
+				return;
+				}
+			}
+		}
+		else if(state=='6' || state=='7'){
+			if(!res_code || !res_notes || res_code=="--None--"){
+				alert("Mandatory Fields left blank ");
+				return;
+			}
+		}
+		c.data.selected_state=state;
+		c.data.onhold_reason=onhold_reason;
+		c.data.additional_comments=comments;
+		c.data.resolution_code=res_code;
+		c.data.resolution_notes=res_notes;
+			
+		c.data.action="saveRecord";
+			
+		c.server.update().then(function(){
+			c.data.action='';
+		});	
+	}
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>//color of disabled fields&#13;
+.form-control[disabled]{&#13;
+background-color:#F6F7F8;&#13;
+}&#13;
+&#13;
+//panel header customization&#13;
+.custom-header{&#13;
+  font-weight:500;&#13;
+  line-height:14px;&#13;
+	background-color:#363C52;&#13;
+  color:#FFFFFF;&#13;
+  padding:15px;&#13;
+}&#13;
+.pre-tag-description{&#13;
+font-family:inherit;&#13;
+  font-size:inherit;&#13;
+&#13;
+  white-space: pre-wrap;       /* Since CSS 2.1 */&#13;
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */&#13;
+  white-space: -pre-wrap;      /* Opera 4-6 */&#13;
+  white-space: -o-pre-wrap;    /* Opera 7 */&#13;
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */&#13;
+&#13;
+}&#13;
+&#13;
+//main widget&#13;
+.incident-details-widget{&#13;
+  font-family: "Roboto-Regular", sans-serif;&#13;
+  padding:10px;&#13;
+  background-color:#ffffff;&#13;
+  margin-bottom:1%;&#13;
+}&#13;
+&#13;
+//form control custom&#13;
+.form-control{&#13;
+  height:40px;&#13;
+  color:#363C52;&#13;
+  border-radius:3px;&#13;
+  margin-bottom:5px;&#13;
+}&#13;
+&#13;
+//form body custom&#13;
+.form-body{&#13;
+  padding:0px;&#13;
+  padding-top:15px;&#13;
+  font-size:14px;&#13;
+  font-weight:400;&#13;
+}&#13;
+&#13;
+//removing bottom margin&#13;
+.panel{&#13;
+	margin-bottom:5px !important;&#13;
+  border: 1px solid rgba(80, 85, 107, 0.15);&#13;
+}&#13;
+&#13;
+//customization to the out of the box SNOW widget&#13;
+.activity-post{&#13;
+  padding:15px;&#13;
+  .panel-body{&#13;
+  	height:750px;&#13;
+    width:100%;&#13;
+    overflow-y:scroll;&#13;
+  }&#13;
+}&#13;
+&#13;
+//float the save button to right&#13;
+.save-button{&#13;
+  float:right;&#13;
+}&#13;
+&#13;
+//custom panel footer class&#13;
+.custom-footer{&#13;
+	padding:10px;&#13;
+  padding-right:20px;&#13;
+  padding-bottom:45px;&#13;
+}&#13;
+&#13;
+//horizontal line to separate div's&#13;
+.horizontal-separator{&#13;
+	border-top:1px solid rgba(80, 85, 107, 0.15000000596046448);&#13;
+  padding-top:15px;&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar {&#13;
+  width: 5px;&#13;
+}&#13;
+&#13;
+/* Track */&#13;
+::-webkit-scrollbar-track {&#13;
+  background: #f1f1f1; &#13;
+}&#13;
+ &#13;
+/* Handle */&#13;
+::-webkit-scrollbar-thumb {&#13;
+  background: #888; &#13;
+}&#13;
+&#13;
+/* Handle on hover */&#13;
+::-webkit-scrollbar-thumb:hover {&#13;
+  background: #555; &#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>cisco_incident_form_widget</id>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_incident_form_widget</name>
+        <option_schema/>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var daoScript=new Cisco_DAOScript();
+	var sn_logger=new Cisco_SNLogger();
+	
+	//instantiation
+	data.onhold_reason="0";
+	data.resolution_code="--None--";
+	data.action='';
+	data.resolution_notes="";
+	data.additional_comments="";
+	data.sys_id=$sp.getParameter('sys_id');
+	
+	//check appropriate role
+	data.has_itil_role=gs.hasRole('itil');
+	
+	//Gliderecord on incident table
+	var incidentGR=new GlideRecordSecure(daoScript.table.createIncident);
+	try{
+		sn_logger.debug('cisco_incident_form_widget : Performing GlideRecord to fetch incident information');
+		incidentGR.get(data.sys_id);
+		data.incident_number=incidentGR.number.getDisplayValue();
+		if(incidentGR){
+			data.incident_details_json=[
+				{
+					"key":"Number",
+					"value":incidentGR.number.getDisplayValue()
+				},
+				{
+					"key":"Category",
+					"value":incidentGR.category.getDisplayValue()
+				},
+				{
+					"key":"Configuration Item",
+					"value":incidentGR.cmdb_ci.getDisplayValue()
+				},
+				{
+					"key":"Severity",
+					"value":incidentGR.severity.getDisplayValue()
+				},
+				{
+					"key":"Assignment Group",
+					"value":incidentGR.assignment_group.getDisplayValue()
+				},
+				{
+					"key":"State",
+					"value":incidentGR.state.getDisplayValue()
+				},
+				{
+					"key":"Opened",
+					"value":incidentGR.opened_at.getDisplayValue()+''
+				},
+				{
+					"key":"Short Description",
+					"value":incidentGR.short_description+''
+				},
+				{
+					"key":"Description",
+					"value":incidentGR.description+''
+				}
+			];
+
+			data.short_desc=incidentGR.short_description+'';
+
+			data.desc=incidentGR.description+'';
+
+			data.selected_state_server=incidentGR.state+'';
+
+			data.selected_state=incidentGR.state+'';
+
+			data.onhold_reason=incidentGR.hold_reason+'';
+
+			data.resolution_code=incidentGR.close_code+'';
+
+			data.resolution_notes=incidentGR.close_notes+'';
+
+			data.additional_comments=incidentGR.comments+'';
+
+			data.incident_number=incidentGR.number.getDisplayValue();
+
+			data.incident_states = [
+				{state : "New", value : "1"},
+				{state : "In Progress", value : "2"},
+				{state : "On Hold", value : "3"},
+				{state : "Resolved",value : "6"},
+				{state : "Closed", value : "7"},
+				{state : "Canceled",value : "8"}
+			];
+
+
+			data.onhold_reason_choices=[
+				{state : "--None--",value : "0"},
+				{state : "Awaiting Caller",value : "1"},
+				{state : "Awaiting Change",value : "5"},
+				{state : "Awaiting Problem",value : "3"},
+				{state : "Awaiting Vendor",value : "4"}
+			];
+
+			data.resolution_codes_choices=[
+				{state : "--None--",value : "--None--"},
+				{state : "Solved (Work Around)",value : "Solved (Work Around)"},
+				{state : "Solved (Permanently)",value : "Solved (Permanently)"},
+				{state : "Solved Remotely (Work Around)",value : "Solved Remotely (Work Around)"},
+				{state : "Solved Remotely (Permanently)",value : "Solved Remotely (Permanently)"},
+				{state : "Not Solved (Not Reproducible)",value : "Not Solved (Not Reproducible)"},
+				{state : "Not Solved (Too Costly)",value : "Not Solved (Too Costly)"},
+				{state : "Closed/Resolved by Caller",value : "Closed/Resolved by Caller"}
+			];
+		}
+	}
+	catch(e){
+		sn_logger.error('cisco_incident_form_widget : '+e);
+	}
+	
+	//activity post widget params
+	data.activityPost = $sp.getWidget('widget-ticket-conversation',
+																		{table: daoScript.table.createIncident,
+																		 sys_id: data.sys_id,
+																		 includeExtended: true,
+																		 title: "${Activity}",
+																		 use_dynamic_placeholder: true,
+																		 journalEntry:"",
+																		 btnLabel: "${Post}"});
+
+	//user input and state changes updates
+	if(input){
+		if(input.action=="saveRecord"){
+			//updating data model
+			data.selected_state=input.selected_state;
+			data.onhold_reason=input.onhold_reason;
+			data.additional_comments=input.additional_comments;
+			data.resolution_code=input.resolution_code;
+			data.resolution_notes=input.resolution_notes;
+			data.selected_state_server=input.selected_state;
+			
+			//updating incident record
+			incidentGR.state=input.selected_state;
+			incidentGR.hold_reason=input.onhold_reason;
+			incidentGR.close_code=input.resolution_code;
+			incidentGR.close_notes=input.resolution_notes;
+			incidentGR.comments=input.additional_comments;
+			
+			//check if user is entitled to update the record
+			if(incidentGR.canWrite() && data.has_itil_role){
+				incidentGR.update();
+				gs.addInfoMessage("Record Updated .");
+			}
+			else{
+				gs.addErrorMessage("Logged in user does not have ITIL role .");
+			}
+		}
+	}	
+	
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-02-28 13:01:36</sys_created_on>
+        <sys_id>84a45157dbb72300a4e47befbf9619d2</sys_id>
+        <sys_mod_count>435</sys_mod_count>
+        <sys_name>cisco_incident_form_widget</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_84a45157dbb72300a4e47befbf9619d2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-07-15 12:16:22</sys_updated_on>
+        <template><![CDATA[<div class="incident-details-widget">
+  <div class="panel panel-default">
+    <div class="panel-heading custom-header">
+	  	Incident - {{c.data.incident_number}}
+    </div>
+    
+    <div class="panel-body form-body">
+      <form>
+        <!-- Incident information fields -->
+        <div class="form-group col-md-6" ng-repeat="item in c.data.incident_details_json" ng-if="item.key!='Short Description'&&item.key!='Description'">
+          <label for="field">{{item.key}}</label>
+          <input type="text" disabled ng-if="item.key!='State'" class="form-control" id="field" value="{{item.value}}">
+          <select ng-if="item.key=='State'"  class="form-control" ng-model="c.data.selected_state" id="field" ng-disabled="c.data.selected_state_server=='7'||c.data.selected_state_server=='8'||!c.data.has_itil_role">
+            <option ng-repeat="item in c.data.incident_states"  value="{{item.value}}">{{item.state}}</option>
+          </select>  
+        </div>  
+        
+        <!-- On hold Reason -->
+
+       <div class="form-group col-md-6" ng-if="c.data.selected_state=='3'" >
+          <label for="field"><i style="font-size:14px;color:red;" class="fa">&#xf069;</i>  On Hold Reason</label>
+         	<select class="form-control" ng-model="c.data.onhold_reason" id="field">
+            <option ng-repeat="item in c.data.onhold_reason_choices"  value="{{item.value}}">{{item.state}}</option>
+          </select>
+        </div>
+     
+        <!-- Short Description and Description -->
+        <div class="form-group col-md-12" ng-repeat="item in c.data.incident_details_json" ng-class="{'horizontal-separator':item.key=='Short Description'}" ng-if="item.key=='Short Description'||item.key=='Description'">
+          <label for="field">{{item.key}}</label>
+          <input ng-if="item.key=='Short Description'" type="text" disabled class="form-control" id="field" value="{{item.value}}">
+					<pre id="field" class="pre-tag-description" ng-if="item.key=='Description'" disabled><span>{{item.value}}</span></pre>          
+        </div>  
+        
+        <!-- Additional Comments -->
+        <div class="form-group col-md-12" ng-if="c.data.onhold_reason=='1' && c.data.selected_state=='3' ">
+          <label for="field"><i ng-if="c.data.onhold_reason=='1'" style="font-size:14px;color:red;" class="fa">&#xf069;</i>  Additional Comments</label>
+          <input type="text" class="form-control" id="field"  placeholder="Additional Comments (Customer Visible)" ng-model="c.data.additional_comments">
+        </div>  
+        
+        <!-- Resolution Code -->
+        <div class="form-group col-md-6" ng-if="c.data.selected_state=='6'||c.data.selected_state=='7' ||c.data.selected_state=='8' " >
+          <label for="field"><i style="font-size:14px;color:red;" class="fa">&#xf069;</i>  Resolution Code</label>
+         	<select class="form-control" ng-model="c.data.resolution_code" id="field" ng-disabled="c.data.selected_state_server=='7' ||c.data.selected_state=='8' ">
+            <option ng-repeat="item in c.data.resolution_codes_choices"  value="{{item.value}}" > {{item.state}}</option>
+          </select>
+        </div>
+  		
+        <!-- Resolution Notes -->
+        <div class="form-group col-md-12" ng-if="c.data.selected_state=='6'||c.data.selected_state=='7' ||c.data.selected_state=='8' ">
+           <label for="field"><i style="font-size:14px;color:red;" class="fa">&#xf069;</i>  Resolution Notes</label>
+         	 <input type="text" class="form-control" id="field"  ng-model="c.data.resolution_notes" ng-disabled="c.data.selected_state_server=='7'||c.data.selected_state=='8' ">
+        </div>  
+          
+        
+      </form>
+    </div>
+    
+    <!-- Out of the box widget conversation widget -->
+    <div class="activity-post horizontal-separator">
+      <sp-widget widget="data.activityPost"></sp-widget>
+    </div>
+      
+		<!-- Save button -->
+    <div class="panel-footer custom-footer">
+      <button type="submit" class="btn btn-primary save-button" ng-hide="(c.data.selected_state_server=='8')|| (c.data.selected_state_server=='7')" ng-click="saveRecord(c.data.selected_state,c.data.onhold_reason,c.data.additional_comments,c.data.resolution_code,c.data.resolution_notes)">
+        Save
+      </button>
+    </div>
+    
+	</div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="incident_rasied" table="x_caci_cisco_inter_cisco_alarms" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>incident_rasied</element>
+            <name>x_caci_cisco_inter_cisco_alarms</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-10 19:30:39</sys_created_on>
+            <sys_id>17f3202bdbc97300f8306ac2ca96198e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>incident_rasied</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_choice_x_caci_cisco_inter_cisco_alarms_incident_rasied</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-10 19:30:39</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>incident_rasied</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Incident Not Raised</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_alarms</name>
+            <sequence/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-10 19:30:51</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>749d4aa6db083300b6237a61399619ec</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-26 13:44:30</sys_updated_on>
+            <value>not_raised</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>incident_rasied</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Incident Raised</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_alarms</name>
+            <sequence/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-10 19:30:39</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>1f8d4666db083300b6237a6139961969</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-26 13:44:35</sys_updated_on>
+            <value>raised</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

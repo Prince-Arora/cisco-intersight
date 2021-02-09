@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>unload</directory>
+        <documentkey>c6a5a60adbeb230062a3d450cf96196d</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="x_caci_cisco_inter_intersight_authentication">
+    <x_caci_cisco_inter_intersight_authentication action="INSERT_OR_UPDATE">
+        <access_link/>
+        <account_id/>
+        <account_name/>
+        <advanced>false</advanced>
+        <api_key_id/>
+        <collection>x_caci_cisco_inter_cisco_alarms</collection>
+        <conditions/>
+        <host_name/>
+        <import_alarms>true</import_alarms>
+        <import_fabric_interconnects>true</import_fabric_interconnects>
+        <import_hyperflex_clusters>true</import_hyperflex_clusters>
+        <imports_servers>true</imports_servers>
+        <incident_assignment_group/>
+        <incident_caller_name/>
+        <incident_severity/>
+        <log_levels>0</log_levels>
+        <mid_server/>
+        <requires_mid_server>false</requires_mid_server>
+        <script/>
+        <secret_key/>
+        <support_url/>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-12 11:27:41</sys_created_on>
+        <sys_id>c6a5a60adbeb230062a3d450cf96196d</sys_id>
+        <sys_mod_count>97</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-11 03:34:34</sys_updated_on>
+        <url/>
+        <validated>NO</validated>
+    </x_caci_cisco_inter_intersight_authentication>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-11 03:46:56</sys_created_on>
+        <sys_id>662f37e6db0c3300b6237a61399619ac</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_metadata_link_662f37e6db0c3300b6237a61399619ac</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-11 03:46:56</sys_updated_on>
+        <tablename>x_caci_cisco_inter_intersight_authentica</tablename>
+    </sys_metadata_link>
+</record_update>

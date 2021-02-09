@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="" label="Cisco Fabric InterConnects" language="en" table="x_caci_cisco_inter_cisco_fibre_interconnects">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element/>
+            <help/>
+            <hint/>
+            <label>Cisco Fabric InterConnects</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_fibre_interconnects</name>
+            <plural>Cisco Fabric InterConnects</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-19 12:04:22</sys_created_on>
+            <sys_id>7d31b6d0dbf32300b6237a61399619b1</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>Cisco Fabric InterConnects</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_documentation_x_caci_cisco_inter_cisco_fibre_interconnects__en</sys_update_name>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-19 14:20:09</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

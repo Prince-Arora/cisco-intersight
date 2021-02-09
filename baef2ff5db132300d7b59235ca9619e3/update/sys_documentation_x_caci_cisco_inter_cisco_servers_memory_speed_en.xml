@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="memory_speed" label="CPU Capacity" language="en" table="x_caci_cisco_inter_cisco_servers">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>memory_speed</element>
+            <help/>
+            <hint/>
+            <label>CPU Capacity</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_servers</name>
+            <plural>CPU Capacities</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>girishgyani</sys_created_by>
+            <sys_created_on>2019-02-20 03:12:04</sys_created_on>
+            <sys_id>9ef0ca6cdb3b230062a3d450cf96196c</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>CPU Capacity</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_documentation_x_caci_cisco_inter_cisco_servers_memory_speed_en</sys_update_name>
+            <sys_updated_by>girishgyani</sys_updated_by>
+            <sys_updated_on>2019-02-20 07:46:23</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

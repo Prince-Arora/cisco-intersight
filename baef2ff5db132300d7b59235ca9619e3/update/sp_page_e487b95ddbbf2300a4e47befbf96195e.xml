@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <css>
+@media only screen and (max-width: 991px) {
+  .content-panes{
+   // margin-left:10px;
+    width:100vw;
+    //padding-right:45px;
+    padding-left:55px;
+    position: absolute;
+    top: 0;
+    //left: 30px;
+    padding-top:10px;
+    overflow-y:scroll;
+    height:100vh;
+    padding-bottom:15%;
+  }
+}
+
+@media only screen and (min-width: 991px) {
+  .content-panes{
+    //margin-left:10px;
+    width:100vw;
+    //padding-right:210px;
+    padding-left:220px;
+    position: absolute;
+    top: 0;
+    //left: 193px;
+    left:0;
+    padding-top:10px;
+    overflow-y:scroll;
+    height:100vh;
+    padding-bottom:10%;
+  }
+}body{
+padding:0;
+}
+body .padding-top {
+    padding-top: 0;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+//remove overall scrolls
+section.page {
+    position: relative;
+    overflow-x:hidden !important;
+    overflow-y:hidden !important;
+}</css>
+        <draft>false</draft>
+        <dynamic_title_structure/>
+        <id>cisco_support</id>
+        <internal>false</internal>
+        <omit_watcher>false</omit_watcher>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <seo_script/>
+        <short_description/>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-02-22 10:26:18</sys_created_on>
+        <sys_id>e487b95ddbbf2300a4e47befbf96195e</sys_id>
+        <sys_mod_count>10</sys_mod_count>
+        <sys_name>cisco_support</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_page_e487b95ddbbf2300a4e47befbf96195e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-19 12:56:54</sys_updated_on>
+        <title>Support</title>
+        <use_seo_script>false</use_seo_script>
+    </sp_page>
+    <sys_translated_text action="delete_multiple" query="documentkey=e487b95ddbbf2300a4e47befbf96195e"/>
+</record_update>

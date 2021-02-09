@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="sys_import_set_row" label="Cisco Server Intermediate Dump" max_length="40" name="x_caci_cisco_inter_cisco_server_intermediate_dump" sizeclass="0" type="collection">
+        <element label="AccountMoid" max_length="500" name="accountmoid" type="string"/>
+        <element label="AdminPowerState" max_length="500" name="adminpowerstate" type="string"/>
+        <element label="Ancestors" max_length="1500" name="ancestors" type="string"/>
+        <element label="AssetTag" max_length="500" name="assettag" type="string"/>
+        <element label="AvailableMemory" max_length="500" name="availablememory" type="string"/>
+        <element label="ChassisId" max_length="500" name="chassisid" type="string"/>
+        <element label="CpuCapacity" max_length="500" name="cpucapacity" type="string"/>
+        <element label="CreateTime" max_length="500" name="createtime" type="string"/>
+        <element label="DeviceMoId" max_length="500" name="devicemoid" type="string"/>
+        <element label="Dn" max_length="500" name="dn" type="string"/>
+        <element label="DomainGroupMoid" max_length="500" name="domaingroupmoid" type="string"/>
+        <element label="FaultSummary" max_length="500" name="faultsummary" type="string"/>
+        <element label="Firmware" max_length="500" name="firmware" type="string"/>
+        <element label="Ipv4Address" max_length="500" name="ipv4address" type="string"/>
+        <element label="KvmIpAddresses" max_length="2000" name="kvmipaddresses" type="string"/>
+        <element label="MemorySpeed" max_length="500" name="memoryspeed" type="string"/>
+        <element label="MgmtIpAddress" max_length="500" name="mgmtipaddress" type="string"/>
+        <element label="Model" max_length="500" name="model" type="string"/>
+        <element label="ModTime" max_length="500" name="modtime" type="string"/>
+        <element label="Moid" max_length="100" name="moid" type="string"/>
+        <element label="Name" max_length="500" name="name" type="string"/>
+        <element label="NumAdaptors" max_length="500" name="numadaptors" type="string"/>
+        <element label="NumCpuCores" max_length="500" name="numcpucores" type="string"/>
+        <element label="NumCpuCoresEnabled" max_length="500" name="numcpucoresenabled" type="string"/>
+        <element label="NumCpus" max_length="500" name="numcpus" type="string"/>
+        <element label="NumEthHostInterfaces" max_length="500" name="numethhostinterfaces" type="string"/>
+        <element label="NumFcHostInterfaces" max_length="500" name="numfchostinterfaces" type="string"/>
+        <element label="NumThreads" max_length="500" name="numthreads" type="string"/>
+        <element label="ObjectType" max_length="500" name="objecttype" type="string"/>
+        <element label="Operability" max_length="500" name="operability" type="string"/>
+        <element label="OperPowerState" max_length="500" name="operpowerstate" type="string"/>
+        <element label="OperState" max_length="500" name="operstate" type="string"/>
+        <element label="Owners" max_length="1500" name="owners" type="string"/>
+        <element label="Parent" max_length="1500" name="parent" type="string"/>
+        <element label="PlatformType" max_length="500" name="platformtype" type="string"/>
+        <element label="Presence" max_length="500" name="presence" type="string"/>
+        <element label="RegisteredDevice" max_length="1500" name="registereddevice" type="string"/>
+        <element label="Revision" max_length="500" name="revision" type="string"/>
+        <element label="Rn" max_length="500" name="rn" type="string"/>
+        <element label="ScaledMode" max_length="500" name="scaledmode" type="string"/>
+        <element label="Serial" max_length="500" name="serial" type="string"/>
+        <element label="ServerId" max_length="500" name="serverid" type="string"/>
+        <element label="ServiceProfile" max_length="500" name="serviceprofile" type="string"/>
+        <element label="SharedScope" max_length="500" name="sharedscope" type="string"/>
+        <element label="SlotId" max_length="500" name="slotid" type="string"/>
+        <element label="SourceObjectType" max_length="500" name="sourceobjecttype" type="string"/>
+        <element label="Tags" max_length="1500" name="tags" type="string"/>
+        <element label="TotalMemory" max_length="500" name="totalmemory" type="string"/>
+        <element label="UserLabel" max_length="500" name="userlabel" type="string"/>
+        <element label="Uuid" max_length="500" name="uuid" type="string"/>
+        <element label="Vendor" max_length="500" name="vendor" type="string"/>
+    </element>
+</database>

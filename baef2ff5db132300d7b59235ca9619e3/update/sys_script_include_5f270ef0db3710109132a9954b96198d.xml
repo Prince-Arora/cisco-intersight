@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_caci_cisco_inter.Cisco_ClientServerBridge</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>Cisco_ClientServerBridge</name>
+        <script><![CDATA[var Cisco_ClientServerBridge = Class.create();
+Cisco_ClientServerBridge.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+    gettingDataFromDeleteButton: function() {
+        try {
+            var logger = new Cisco_SNLogger();
+            logger.debug("Inside Cisco_ClientServerBridge.gettingDataFromDeleteButton getting data from delete button.");
+            var daoScrpt = new Cisco_DAOScript();
+            var result = daoScrpt.clearApplicationData();
+            return result;
+        } catch (e) {
+            logger.error("Exception caught inside Cisco_ClientServerBridge.gettingDataFromDeleteButton while getting data from delete button. Error :- " + e);
+        }
+    },
+    type: 'Cisco_ClientServerBridge'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-09 10:51:26</sys_created_on>
+        <sys_id>5f270ef0db3710109132a9954b96198d</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Cisco_ClientServerBridge</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_include_5f270ef0db3710109132a9954b96198d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-12 04:29:46</sys_updated_on>
+    </sys_script_include>
+</record_update>

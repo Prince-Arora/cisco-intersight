@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_caci_cisco_inter.Cisco_ImportInventory</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>Cisco_ImportInventory</name>
+        <script><![CDATA[var Cisco_ImportInventory = Class.create();
+Cisco_ImportInventory.prototype = {
+	initialize: function() {
+		
+		this.appUtil = new Cisco_AppUtil();
+		this.daoScript = new Cisco_DAOScript();
+		this.logger = new Cisco_SNLogger();
+		
+		this.pageBreaker = 200;
+	},
+	
+	importDeviceRegistrationData: function( current){
+		try{
+			this.logger.debug("Inside Cisco_ImportInventory.importDeviceRegistrationData creating API endpoint.");
+			
+			var endPoint = this.appUtil.configuration.api.deviceRegistration + '$inlinecount=allpages&$skip=0&$top=1';
+			var response = this.appUtil.makeApiCall('GET', endPoint, '', current.intersight);
+			
+			if( response.getStatusCode() == '200' ){
+				
+				this.logger.info("Inside Cisco_ImportInventory.importDeviceRegistrationData. Connection established to " + this.appUtil.configuration.api.deviceRegistration);
+				
+				var parsed = this.appUtil.parse(response.getBody());
+				var records = parsed.Count;
+				
+				var pages = parseInt(records/this.pageBreaker);
+				
+				for(var i=0; i<=pages; i++){
+					
+					endPoint = this.appUtil.configuration.api.deviceRegistration + '$inlinecount=allpages&$skip=' + (i*this.pageBreaker) + '&$top=' + this.pageBreaker;
+					response = this.appUtil.makeApiCall('GET', endPoint, '', current.intersight);
+					
+					if( response.getStatusCode() == '200' ){
+						
+						this.logger.info("Inside Cisco_ImportInventory.importDeviceRegistrationData. Connection established to " + endPoint);
+						
+						var parsedResp = this.appUtil.parse(response.getBody());
+						var results = parsedResp.Results;
+						
+						for(var j in results){
+							
+							var row = results[j];
+							
+							var gr = new GlideRecord('x_caci_cisco_inter_cisco_deviceregistration_dump');
+							gr.initialize();
+							gr.devicehostname = JSON.stringify(row.DeviceHostname) ;
+							gr.executionmode = row.ExecutionMode ;
+							gr.platformtype = row.PlatformType ;
+							gr.moid = row.Moid ;
+							gr.insert();
+						}
+						
+					}else{
+						
+						this.logger.error("Inside Cisco_ImportInventory.importDeviceRegistrationData. Connection to " + endPoint + " not established. Error:- "+response.getBody()+" Status code :- "+response.getStatusCode());
+					}
+					
+				}
+				
+			}else{
+				
+				this.logger.error("Inside Cisco_ImportInventory.importDeviceRegistrationData. Connection to " + this.appUtil.configuration.api.fetchServers + " not established. Error:- "+response.getBody() +" Status code :- "+response.getStatusCode() );
+			}
+			
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_ImportInventory.importDeviceRegistrationData while creating endpoint pagination. Error :- "+e);
+		}
+	},
+	
+	startInventoryImport: function( current){
+		
+		try{
+			this.logger.debug("Inside Cisco_ImportInventory.startInventoryImport creating API endpoint.");
+			
+			var inventory = 'fetchServers';
+			var payload = current.payload+'';
+			
+			if( payload == 'Server')
+				inventory = 'fetchServers';
+			else if( payload == 'Fabric Interconnects')
+				inventory = 'fetchFIs';
+			else if( payload == 'HX clusters')
+				inventory = 'fetchHX';
+			else if( payload == 'Alarms')
+				inventory = 'fetchAlarms';	
+			
+			var endPoint = this.appUtil.configuration.api[inventory] + '$inlinecount=allpages&$skip=0&$top=1';
+			
+			var response = this.appUtil.makeApiCall('GET', endPoint, '', current.intersight);
+			
+			if( response.getStatusCode() == '200' ){
+				
+				this.logger.info("Inside Cisco_ImportInventory.startInventoryImport. Connection established to " + this.appUtil.configuration.api[inventory]);
+
+				if( payload == 'Alarms')					
+					this.daoScript.setFlagsforAlarms();
+				
+				var parsed = this.appUtil.parse(response.getBody());
+				var records = parsed.Count;
+						
+				var pages = parseInt(records/this.pageBreaker);
+				
+				for(var i=0; i<=pages; i++){
+					
+					endPoint = this.appUtil.configuration.api[inventory] + '$inlinecount=allpages&$skip=' + (i*this.pageBreaker) + '&$top=' + this.pageBreaker;
+					
+					if( payload == 'Alarms'){
+						
+						var alarmJson = {};
+						
+						alarmJson.payload = endPoint;
+						alarmJson.intersight = current.intersight;
+						alarmJson.parameter = current.payload+'';
+						
+						this.processInventoryEndpoint( alarmJson);
+					}else{
+						this.daoScript.insertIntoQueue('Process Inventory Endpoint', current.payload+'', endPoint, current.intersight+'');	
+					}
+				}
+				
+				if( payload == 'Alarms')
+					this.daoScript.deleteNotUpdatedAlarms();
+				
+			}else{
+				
+				this.logger.error("Inside Cisco_ImportInventory.startInventoryImport. Connection to " + this.appUtil.configuration.api.fetchServers + " not established. Error:- "+response.getBody()+" Status code :- "+response.getStatusCode() );
+			}
+			
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_ImportInventory.startInventoryImport while creating endpoint pagination. Error :- "+e);
+		}
+		
+	},
+	
+	processInventoryEndpoint: function( current){
+		
+		try{
+			var endPoint = current.payload+'';
+			this.logger.debug("Inside Cisco_ImportInventory.processInventoryEndpoint processing endpoint " + endPoint);
+			
+			var response = this.appUtil.makeApiCall('get', endPoint, '', current.intersight);
+			
+			if( response.getStatusCode() == '200' ){
+				
+				this.logger.info("Inside Cisco_ImportInventory.processInventoryEndpoint. Connection established to " + endPoint);
+				
+				var parsed = this.appUtil.parse(response.getBody());
+				var results = parsed.Results;
+				
+				for(var i in results){
+					
+					if( current.parameter == 'Alarms'){
+						
+						var alarmJson = {};
+						
+						alarmJson.payload = this.appUtil.stringify(results[i]);
+						alarmJson.intersight = current.intersight;
+						alarmJson.parameter = current.parameter+'';
+						
+						this.processInventoryResponse( alarmJson);
+					}else{
+						this.daoScript.insertIntoQueue('Process Inventory Response', current.parameter+'', this.appUtil.stringify(results[i]), current.intersight+'');	
+					}
+				}
+				
+			}else{
+				
+				this.logger.error("Inside Cisco_ImportInventory.processInventoryEndpoint. Connection to " + endPoint + " not established. Error:- "+response.getBody()+" Status code :- "+response.getStatusCode());
+			}
+			
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_ImportInventory.processInventoryEndpoint while processing endpoint. Error :- "+e);
+		}
+	},
+	
+	processInventoryResponse: function( current){
+		
+		try{
+			this.logger.debug("Inside Cisco_ImportInventory.processInventoryResponse processing response JSON.");
+			
+			var tableName = 'fetchServers';
+			var parameter = current.parameter+'';
+			
+			if( parameter == 'Server')
+				tableName = 'serverIntermediateDump';
+			else if( parameter == 'Fabric Interconnects')
+				tableName = 'fiIntermediateDump';
+			else if( parameter == 'HX clusters')
+				tableName = 'HXIntermediateDump';
+			else if( parameter == 'Alarms')
+				tableName = 'alarmsDump';
+			
+			this.daoScript.insertIntoIntermediateDump( tableName, this.appUtil.parse(current.payload+''));
+			
+		}catch(e){
+			this.logger.error("Exception caught inside Cisco_ImportInventory.processInventoryResponse while processing processing response JSON. Error :- "+e);
+		}
+	},
+	
+	type: 'Cisco_ImportInventory'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-19 11:14:48</sys_created_on>
+        <sys_id>09556ed4db33230062a3d450cf96191c</sys_id>
+        <sys_mod_count>49</sys_mod_count>
+        <sys_name>Cisco_ImportInventory</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_include_09556ed4db33230062a3d450cf96191c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-25 11:40:40</sys_updated_on>
+    </sys_script_include>
+</record_update>

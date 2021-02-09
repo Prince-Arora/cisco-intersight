@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope) {
+  /* widget controller */
+  var c = this;
+	$scope.select_container=function(choice){
+		c.data.selected=choice;
+		c.data.view_table=(c.data.selected=='incident')?c.data.incident_table:c.data.alarms_table;
+		if(c.data.selected=='incident'){
+		$scope.selectFilter(c.data.selected_incident_filter);
+		}else{
+			$scope.selectFilter(c.data.selected_alarms_filter);
+		}
+	}
+	
+	$scope.selectFilter=function(selected_filter){
+		var filter='';
+		if(selected_filter!="All"){
+			if(c.data.selected=='incident'){
+				switch(selected_filter){
+					case "New":filter="cmdb_ci="+c.data.sys_id+"^state=1";break;
+					case "On Hold":filter="cmdb_ci="+c.data.sys_id+"^state=3";break;
+					case "In Progress":filter="cmdb_ci="+c.data.sys_id+"^state=2";break;
+					case "Resolved":filter="cmdb_ci="+c.data.sys_id+"^state=6";break;
+					case "Canceled":filter="cmdb_ci="+c.data.sys_id+"^state=8";break;
+					case "Closed":filter="cmdb_ci="+c.data.sys_id+"^state=7";break;
+				}
+			}
+			else if(c.data.selected=='alarms'){
+				filter="ci_record="+c.data.sys_id+"^severity="+selected_filter;
+			}
+			
+			c.data.view_all_filter="?id="+c.data.view_table+"&filter="+filter;
+		}
+		else if(selected_filter=="All")
+		{
+			if(c.data.selected=='incident')
+				{
+			c.data.view_all_filter="?id="+c.data.view_table+"&filter=cmdb_ci="+c.data.sys_id;
+		}
+			else if(c.data.selected=='alarms'){
+			c.data.view_all_filter="?id="+c.data.view_table+"&filter=ci_record="+c.data.sys_id;
+		}
+		}
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.footer-class{
+	text-align:center;
+}
+.slider-container{
+	display:inline-block;
+}
+.active{
+  border-bottom: 3px solid #049FD9;
+}
+.main-heading{
+background-color:#1F2D3D ;
+  color:#FFFFFF;
+}
+.main-container{
+ font-family:"Roboto",sans-serif;
+  font-size:14px;
+}
+
+.incident-state-7{
+  color:#66BB6A;
+  font-size:12px;
+}
+.incident-state-8{
+  color:#000000;
+  font-size:12px;
+}
+.incident-state-6{
+  color:#049FD9;
+  font-size:12px;
+}
+.incident-state-1{
+  color:#004BAF;
+  font-size:12px;
+}
+.incident-state-3{
+  color:#EE5350;
+  font-size:12px;
+}
+.incident-state-2{
+  color:#FFA000;
+  font-size:12px;
+}
+
+.panel-body{
+padding:0;
+  margin:0;
+}
+.list-inline{
+padding:0;
+  margin:0;
+}
+.choice-header{
+  border-bottom: 1px solid #049FD9;
+}
+
+
+.choice{
+  width:49%;
+ 	//margin:2px;
+ 	text-align:center;
+ 	padding-top:10px;
+ 	padding-bottom:10px;
+  color: #363C52;
+  //margin-left:2px;
+}
+
+
+.item-heading{
+padding-top:5px;
+  padding-bottom:5px;
+  
+}
+
+.item-list{
+padding:5px;
+  
+  min-height:550px;
+  height:550px;
+  overflow-y:scroll;
+}
+
+.item{
+margin-bottom:3px;
+  max-height:110px;
+ // height:80px;
+}
+
+.item-text{
+  overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>cisco_alarms_form_widget</id>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_alarms_form_widget</name>
+        <option_schema/>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+	var daoScript=new Cisco_DAOScript();
+	var sn_logger=new Cisco_SNLogger();
+	
+	//instantiation
+	data.selected="incident";
+	data.selected_incident_filter="All";
+	data.selected_alarms_filter="All";
+	data.sys_id=$sp.getParameter('sys_id');
+	data.incident_table="cisco_incidents";
+	data.alarms_table="cisco_alarms";
+	data.view_table=data.incident_table;
+	
+	//initial filter
+	data.view_all_filter="?id="+data.view_table;
+	try
+	{
+		sn_logger.debug('cisco_alarms_form_widget : Inside GlideRecord to fetch records');
+		data.table=$sp.getParameter('table');
+		var gr=new GlideRecordSecure(data.table);
+		gr.get(data.sys_id);
+		data.item_name=gr.name+'';
+
+		data.incident_array={
+			"All":[],
+			"New":[],
+			"On Hold":[],
+			"In Progress":[],
+			"Closed":[],
+			"Resolved":[],
+			"Canceled":[]
+		};
+
+		data.alarms_array={
+			"All":[],
+			"Critical":[],
+			"Warning":[],
+			"Info":[],
+			"Cleared":[]	
+		};
+		sn_logger.debug('cisco_alarms_form_widget : Inside GlideRecord to fetch records'+gs.hasRole('itil'));
+		if(gs.hasRole('itil')){
+
+			var incidentGR=new GlideRecordSecure(daoScript.table.createIncident);
+			incidentGR.addQuery('cmdb_ci',data.sys_id);
+			incidentGR.setLimit(20);
+			incidentGR.orderBy('sys_updated_on');
+			incidentGR.query();
+			while(incidentGR.next()){
+				data.incident_array[incidentGR.state.getDisplayValue()].push({
+					"number":incidentGR.number+'',
+					"state":incidentGR.state.getDisplayValue()+'',
+					"description":incidentGR.short_description+'',
+					"sys_id":incidentGR.sys_id+'',
+					"state_id":incidentGR.state+''
+				});
+				data.incident_array['All'].push({
+					"number":incidentGR.number+'',
+					"state":incidentGR.state.getDisplayValue()+'',
+					"description":incidentGR.short_description+'',
+					"sys_id":incidentGR.sys_id+'',
+					"state_id":incidentGR.state+''
+				});
+			}
+		}
+
+		var alarmsGR=new GlideRecordSecure(daoScript.table.alarms);
+		alarmsGR.addQuery('ci_record', data.sys_id);
+		alarmsGR.setLimit(10);
+		alarmsGR.query();
+		while(alarmsGR.next()){
+			data.alarms_array[alarmsGR.severity].push({
+				"code":alarmsGR.code+'',
+				"severity":alarmsGR.severity+'',
+				"message":alarmsGR.message+'',
+				"sys_id":alarmsGR.sys_id+''
+			});
+			data.alarms_array['All'].push({
+				"code":alarmsGR.code+'',
+				"severity":alarmsGR.severity+'',
+				"message":alarmsGR.message+'',
+				"sys_id":alarmsGR.sys_id+''
+			});
+		}
+	}
+	catch(exception)
+	{
+		sn_logger.error('cisco_alarms_form_widget : unable to perform GlideRecord query'+exception);
+	}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-05 11:57:36</sys_created_on>
+        <sys_id>67e5f27cdbcc3300a4e47befbf9619cc</sys_id>
+        <sys_mod_count>371</sys_mod_count>
+        <sys_name>cisco_alarms_form_widget</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_67e5f27cdbcc3300a4e47befbf9619cc</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-26 10:52:58</sys_updated_on>
+        <template><![CDATA[<div class="main-container">
+  <div class="panel panel-default">
+   <div class="panel-heading main-heading">
+    <h3 class="panel-title">Most Recent Incidents & Alarms</h3>
+  </div>
+    <div class="panel-body">
+      <ul class="list-inline choice-header row">
+        <li class="col-md-6 choice" ng-click="select_container('incident')" ng-class="{'active':c.data.selected=='incident'}">Incidents</li>
+        <li class="col-md-6 choice" style="margin-left:2px;" ng-click="select_container('alarms')" ng-class="{'active':c.data.selected=='alarms'}">Alarms</li>
+      </ul>
+    
+      <div ng-if="c.data.selected=='incident'">
+        <div style="padding:10px;">
+            <select class="form-control" ng-model="c.data.selected_incident_filter" ng-change="selectFilter(c.data.selected_incident_filter)">
+              <option ng-repeat="(key,value) in c.data.incident_array">{{key}}</option>
+            </select>
+          </div>
+        <div class="list-group item-list">
+          <a ng-href="?id=cisco_incidents_form&sys_id={{incident.sys_id}}" class="list-group-item item" ng-repeat="incident in c.data.incident_array[c.data.selected_incident_filter]">
+            <p class="list-group-item-heading item-heading">{{incident.number}}
+              <span style="float:right">
+                {{incident.state}} &nbsp 
+                <i class="fa fa-circle incident-state-{{incident.state_id}}"></i>
+               
+              </span>
+            </p>
+            <p class="list-group-item-text item-text">{{incident.description}}</p>
+          </a>
+          <h5 ng-if="c.data.selected=='incident' && c.data.incident_array[c.data.selected_incident_filter].length==0 " style="text-align:center">
+            No Data Found
+          </h5>
+        </div>
+      </div>
+
+      <div ng-if="c.data.selected=='alarms'">
+				  <div style="padding:10px;">
+            <select class="form-control" ng-model="c.data.selected_alarms_filter" ng-change="selectFilter(c.data.selected_alarms_filter)" >
+              <option ng-repeat="(key,value) in c.data.alarms_array">{{key}}</option>
+            </select>
+          </div>
+        <div class="list-group item-list">
+          <a href="?id=cisco_alarms&filter=ci_record={{c.data.sys_id}}" class="list-group-item item" ng-repeat="alarm in c.data.alarms_array[c.data.selected_alarms_filter]">
+            <p class="list-group-item-heading item-heading">{{alarm.code}}
+              <span style="float:right">
+                {{alarm.severity}} &nbsp 
+                <i class="fa fa-circle" style="font-size:12px;color:#E85454" ng-if="alarm.severity=='Critical'"></i>
+                <i class="fa fa-circle" style="font-size:12px;color:#f0ad4e" ng-if="alarm.severity=='Warning'"></i>
+                <i class="fa fa-circle" style="font-size:12px;color:#5bc0de" ng-if="alarm.severity=='Info'"></i>
+                <i class="fa fa-circle" style="font-size:12px;color:#5cb85c" ng-if="alarm.severity=='Cleared'"></i>
+                
+              </span>
+            </p>
+            <p class="list-group-item-text item-text">{{alarm.message}}</p>
+          </a>
+          <h5 ng-if="c.data.selected=='alarms'&& c.data.alarms_array[c.data.selected_alarms_filter].length==0 " style="text-align:center">
+            No Data Found
+          </h5>
+        </div>
+      </div>
+
+    </div>
+    <div class="panel-footer footer-class">
+      <a ng-href="{{c.data.view_all_filter}}"><span>View All</span></a>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

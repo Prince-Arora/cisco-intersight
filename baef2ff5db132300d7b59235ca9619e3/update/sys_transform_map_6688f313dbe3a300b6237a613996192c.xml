@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_transform_map">
+    <sys_transform_map action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <copy_empty_fields>false</copy_empty_fields>
+        <create_new_record_on_empty_coalesce_fields>false</create_new_record_on_empty_coalesce_fields>
+        <enforce_mandatory_fields>No</enforce_mandatory_fields>
+        <name>Cisco_ImportAlarms</name>
+        <order>100</order>
+        <run_business_rules>false</run_business_rules>
+        <run_script>true</run_script>
+        <script><![CDATA[(function transformRow(source, target, map, log, isUpdate) {
+	
+	target.date_time = source.lasttransitiontime;
+	var snLogger  = new Cisco_SNLogger();
+	var appUtil = new Cisco_AppUtil();
+	var daoScript = new Cisco_DAOScript();
+	
+	try{
+		
+		var filter = gs.getProperty('x_caci_cisco_inter.alarm.raise.incident.conditions');
+		
+		if( GlideFilter.checkRecord(target, filter, true) && target.incident==''){
+			
+			var incidentRef = daoScript.createIncident(target);
+			
+			target.incident_rasied = "raised";
+			target.incident = incidentRef;
+		
+		}else if(target.incident==''){
+			
+			target.incident_rasied = "not_raised";
+		}else{
+			
+			var incidentRef = target.incident.getRefRecord();
+		
+			if(incidentRef.incident_state == 6)
+				daoScript.reOpenIncident( incidentRef);	
+			else
+				daoScript.updateIncident( incidentRef, target);
+		}
+			
+		if(source.lasttransitiontime){
+			
+			var lstTransistiontime = source.lasttransitiontime; 
+			
+			if(lstTransistiontime.indexOf('.')>0) {
+			
+				var indexDot = lstTransistiontime.indexOf('.');
+				lstTransistiontime = lstTransistiontime.substr(0,indexDot +1);
+				lstTransistiontime = lstTransistiontime.replace(".", ".000Z");
+			} else {
+				
+				lstTransistiontime = lstTransistiontime.replace("Z", ".000Z");
+			}
+			var dateTime = new Date(lstTransistiontime);
+			target.date_time  = dateTime.toUTCString() ;
+		}
+		
+		target.deletion = false;
+		
+	}catch(e) {
+		
+		snLogger.error("Exception caught in Cisco_ImportAlarms transform map during creation of incidents " + e);
+	}
+	
+})(source, target, map, log, action==="update");]]></script>
+        <source_table>x_caci_cisco_inter_cisco_alarms_dump</source_table>
+        <sys_class_name>sys_transform_map</sys_class_name>
+        <sys_created_by>Prince Arora</sys_created_by>
+        <sys_created_on>2019-02-16 14:42:28</sys_created_on>
+        <sys_id>6688f313dbe3a300b6237a613996192c</sys_id>
+        <sys_mod_count>54</sys_mod_count>
+        <sys_name>Cisco_ImportAlarms</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_transform_map_6688f313dbe3a300b6237a613996192c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-08 07:00:40</sys_updated_on>
+        <target_table>x_caci_cisco_inter_cisco_alarms</target_table>
+    </sys_transform_map>
+</record_update>

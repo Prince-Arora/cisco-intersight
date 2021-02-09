@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Cisco DeviceRegistration" max_length="40" name="x_caci_cisco_inter_cisco_deviceregistration" sizeclass="0" type="collection">
+        <element display="true" label="Device Hostname" max_length="32" name="device_hostname" type="string"/>
+        <element label="Execution mode" max_length="255" name="execution_mode" type="string"/>
+        <element label="moid" max_length="255" name="moid" type="string"/>
+        <element label="Source Type" max_length="255" name="platform_type" type="string"/>
+    </element>
+</database>

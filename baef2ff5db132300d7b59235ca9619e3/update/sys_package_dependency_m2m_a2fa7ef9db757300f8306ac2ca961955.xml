@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
+    <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
+        <dependency display_value="Performance Analytics and Reporting - Service Portal Widgets" source="com.snc.pa.sp.widget">fc3943d210b52010d152bac818665e26</dependency>
+        <min_version>1.0.0</min_version>
+        <sys_created_by>kisundar</sys_created_by>
+        <sys_created_on>2019-06-03 14:43:28</sys_created_on>
+        <sys_id>a2fa7ef9db757300f8306ac2ca961955</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_updated_by>kisundar</sys_updated_by>
+        <sys_updated_on>2019-06-03 14:43:28</sys_updated_on>
+    </sys_package_dependency_m2m>
+</record_update>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format/>
+        <height/>
+        <image>48dff53adbc87700a4e47befbf96190b</image>
+        <name>incidents-active.svg</name>
+        <size_bytes>2786</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:08:52</sys_created_on>
+        <sys_id>3bbfb13adbc87700a4e47befbf961969</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>incidents-active.svg</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>db_image_3bbfb13adbc87700a4e47befbf961969</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-11 15:40:20</sys_updated_on>
+        <thumbnail/>
+        <width/>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color/>
+        <chunk_size_bytes>734003</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/svg+xml</content_type>
+        <file_name>image</file_name>
+        <hash/>
+        <image_height/>
+        <image_width/>
+        <size_bytes>2786</size_bytes>
+        <size_compressed>1134</size_compressed>
+        <state/>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:09:01</sys_created_on>
+        <sys_id>48dff53adbc87700a4e47befbf96190b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>gurjotjoshi</sys_updated_by>
+        <sys_updated_on>2019-03-11 13:09:01</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>3bbfb13adbc87700a4e47befbf961969</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="48dff53adbc87700a4e47befbf96190b">48dff53adbc87700a4e47befbf96190b</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:09:01</sys_created_on>
+        <sys_id>88dff53adbc87700a4e47befbf96190b</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>bVbLbhRJELzzFa3Zy65k2pXPylxhDmuJk/kBbkgYbMk8BCPM529ktZmpRj5NT0xOVGTko/rVj5+fll+fH778uDrcHY/f/r28fHx8XB9l/fr90yW31i4RcVge7z8c764OZIfl7vb+090Rz35Yft7fPv739dfVoS1tIVuAvX6xLK++vT/eLR/vHx6uDn+9efPmsHy4OrylvmpmetcLXa4p1lA2J8c3yjVFu6lc2NqSyVl+g+F54aviKSl4uZlg0rXhUyLAN8G2ChHjpOJo7NzDLshX4e4qsUBJIFS8QM0unRLEZzRXN4gQAe+M9mTIpyLozmkWhSZlIqJQF45oNNAuZqqDwQLfIgecrSyoYPxq1PoFt/GtPitYW1p3eYKFmzHz+KsrVA35bNIlx+mR8FEhX9boHcdQZYXALs2Xmz6sCw+f4WvfbG4tZtjKO0VijnTst7+dQG9zEa5tqtNEpct0nA5LzyV/t7yFXJZsUfmca3czwfMhEwxV3axloKSxqoU544TVIbWLDjtPJ53ROfsJRvbanZJ8F23bI7en87R39hmd23CC5zacYVikztximc4DGuzNOs9eTehN0aEezWiGrwETKZP1GQaKsyxG5QI9Kd0H6D3dpNBE14vwqAah0kJQgekj1sjcw75SNark6MQTDJKgyGGzNDD33Ik4m79TfK7UHDz1wOaQiS7Pd0a1DK/WGyYFGfKaxk2HOllJUIqmMwzUoCMMLLIqYRjAskeRCYf0QXGCFcMYXcOXmRjyCNMnWGyTijN6Dbg1zmi+CyawEea274gndFaxg0+SJ+IpvWe9+MMkxcpQ6SpDXrcMbNkZrr+SmDgVSp4ZoTt0lreDsf+sDx0nXsHOC0qhnbozWgx4bKMZd8HM2JAae94JnDWc4J3gE+8uuWecKItwNia37pJm2TyHQdiZ2RSpAGYPtJ2NLspkDuSM1WgYE+0y0E4sBQZOlt5pbF336FiZF9TWCm25ETsDHmg0iN/6kDAQSvCSEJueW6mhWCq5M1htkZjOSm4KRa+0Du30mzaJC1V33Ae+SWA0r0AZlVW43aIEA8UdNHhJUVEEV26EC4OKga2WuG02YMfkaFhVNFn63jNaXQP7qWNLhqY08kGRHLWKgMIOlobjqnKUuLViRm+qqZiwlma0PANo7LKjwFAkblXK3XHPVHMrMndsXK0i1aWNPH1jxisAt8qk/ge7BgejTzCxZUVi4XQZZaYepNhldS9mw1Q/7Rvc1Z2kbgFDb2hYBTdKvLaUx0pwgMSXc3oTePPkBd4VZriam5hq0/5BgfFPVt8dB5OxLvG410boYpSSdZcI1X2A24d3SRdalbbhUF1JKUMcuWlro4dgbMPe3sQFljHqB1jQjz52Id5scJ2NWDO8lmzjaF6XNM/oWEE9tlWxC4ZrmGne86LNG1EfGlLxbhhjwp6p6bvDcvz+/suPj1+/f746jMeH98fbv1/a8lL/OVy+fvGq3lxfv/gfjMeg1OIKAAA=</data>
+        <length>1500</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="48dff53adbc87700a4e47befbf96190b">48dff53adbc87700a4e47befbf96190b</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:09:01</sys_created_on>
+        <sys_id>0cdff53adbc87700a4e47befbf96190b</sys_id>
+    </sys_attachment_doc>
+</record_update>

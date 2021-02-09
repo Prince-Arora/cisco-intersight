@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="cmdb_ci_appl_cisco_fibre" label="Cisco Fabric InterConnects" max_length="40" name="x_caci_cisco_inter_cisco_fibre_interconnects" sizeclass="0" type="collection">
+        <element label="AccountMoid" max_length="100" name="accountmoid" type="string"/>
+        <element label="adminInBandInterfaceState" max_length="255" name="admininbandinterfacestate" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Available Ports" max_length="40" name="available_ports" type="integer"/>
+        <element label="Create Time" max_length="255" name="create_time" type="string"/>
+        <element label="Device Moid" max_length="255" name="device_moid" type="string"/>
+        <element label="Domain Group Moid" max_length="255" name="domain_group_moid" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Used Ports" max_length="40" name="ether_ports_configured" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Ether Ports LinkUp" max_length="1000" name="ether_ports_linkup" type="integer"/>
+        <element label="Expansion Modules" max_length="1000" name="expansion_modules" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="FC Ports" max_length="40" name="fc_ports" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="FC Ports Configured" max_length="1000" name="fc_ports_configured" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="FC Ports LinkUp" max_length="40" name="fc_ports_linkup" type="integer"/>
+        <element label="firmware" max_length="255" name="firmware" type="string"/>
+        <element label="Health" max_length="40" name="health" type="string"/>
+        <element label="Mod Time" max_length="255" name="mod_time" type="string"/>
+        <element label="Moid" max_length="255" name="moid" type="string"/>
+        <element label="Management IP" max_length="1000" name="out_of_band_ip_address" type="string"/>
+        <element label="Out of Band IP gateway" max_length="1000" name="out_of_band_ip_gateway" type="string"/>
+        <element label="Out Of Band IP Mask" max_length="1000" name="out_of_band_ip_mask" type="string"/>
+        <element label="Owners" max_length="500" name="owners" type="string"/>
+        <element label="Peer FI" max_length="32" name="peer_fi" type="string"/>
+        <element label="Registered Device" max_length="2000" name="registered_device" type="string"/>
+        <element label="Serial" max_length="1000" name="serial" type="string"/>
+        <element label="Source Object  Type" max_length="1000" name="source_object_type" type="string"/>
+        <element label="Switch ID" max_length="1000" name="switch_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Tags" max_length="500" name="tags" type="simple_name_values"/>
+        <element attributes="edge_encryption_enabled=true" label="Total  Ports" max_length="40" name="total_ether_ports" type="integer"/>
+    </element>
+</database>

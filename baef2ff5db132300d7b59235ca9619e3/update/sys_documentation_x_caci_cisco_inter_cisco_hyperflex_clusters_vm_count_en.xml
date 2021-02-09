@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="vm_count" label="VM Count" language="en" table="x_caci_cisco_inter_cisco_hyperflex_clusters">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>vm_count</element>
+            <help/>
+            <hint/>
+            <label>VM Count</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_hyperflex_clusters</name>
+            <plural>VM Counts</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-20 11:46:33</sys_created_on>
+            <sys_id>32b6ff20dbff2300b6237a61399619c7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>VM Count</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_documentation_x_caci_cisco_inter_cisco_hyperflex_clusters_vm_count_en</sys_update_name>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-20 11:46:33</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>Filter for filtering cisco related incidents</description>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_caci_cisco_inter.cisco_incident_filter</name>
+        <read_roles>x_caci_cisco_inter.intersight_admin</read_roles>
+        <suffix>x_caci_cisco_inter.cisco_incident_filter</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-10 07:04:24</sys_created_on>
+        <sys_id>e0226b5edb483700a4e47befbf961943</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>x_caci_cisco_inter.cisco_incident_filter</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_properties_e0226b5edb483700a4e47befbf961943</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-22 10:36:39</sys_updated_on>
+        <type>string</type>
+        <value>cmdb_ci.sys_class_name=x_caci_cisco_inter_cisco_fibre_interconnects^ORcmdb_ci.sys_class_name=x_caci_cisco_inter_cisco_hyperflex_clusters^ORcmdb_ci.sys_class_name=x_caci_cisco_inter_cisco_servers^NQshort_descriptionSTARTSWITHIntersight Alarm:</value>
+        <write_roles>x_caci_cisco_inter.intersight_admin</write_roles>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=e0226b5edb483700a4e47befbf961943"/>
+</record_update>

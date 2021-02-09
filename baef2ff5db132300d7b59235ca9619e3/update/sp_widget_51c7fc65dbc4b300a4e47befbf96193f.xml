@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($rootScope,$timeout,$scope,$location) {
+  /* widget controller */
+  var c = this;
+	
+	$timeout(function(){
+		$rootScope.$broadcast('sp.update.breadcrumbs',[{"label":"Fabric Interconnects","url":"?id=cisco_fi"},{"label":c.data.fabric_int_name,"url":"#"}]);
+	},10);
+	
+	//check if json object is empty
+	$scope.isempty=function(data){
+		return (Object.keys(data).length>0) ? true : false;
+	}
+	
+	//handle the on click of table widget
+	$scope.$on('data_table.click', function(e, parms){
+		var s = {id: parms.id, table: parms.table, sys_id: parms.sys_id, view: 'sp'};
+		var newURL =$location.search(s);
+		spAriaFocusManager.navigateToLink(newURL.url());
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>ul{
+  padding:0;
+list-style-type:none;
+}
+.list-item{
+  padding-top:10px;
+  padding-bottom:10px;
+  
+}
+
+.servers-container{
+height:712px;
+}
+
+.tags-list{
+ 
+		padding:0px !important;
+ 
+}
+.main-container{
+ font-family:"Roboto",sans-serif;
+  font-size:14px;
+}
+
+.tag{
+  
+  //padding-right: 7.5px;
+//  padding-left: 7.5px;
+  //height: 24px;
+  //width:10px;
+  padding:5px 10px 5px 10px;
+  margin:2px;
+  min-width:100px;
+  background-color: #ecedf1;
+  border-radius: 3px;
+  overflow: hidden;
+  
+}
+.health-status-info {
+ 	font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #0095D3;
+  color:#ffffff;
+}
+.health-status-critical {
+  min-width:100px;
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+  padding: 5px 10px 5px 10px;
+  background-color: #E85454;
+  color:#ffffff;
+}
+
+
+.health-status-warning {
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #FFA000;
+  color:#ffffff;
+}
+
+
+.health-status-healthy {
+  font-size: 12px;
+  border-radius: 4px;
+  z-index:2;
+ // margin-left:2px;
+  padding: 5px 5px 5px 10px;
+  background-color: #66BB6A;
+  color:#ffffff;
+}
+.value{
+float:right;
+  text-align:right;
+}
+.key{
+  float:left;
+}
+.details-header{
+background-color:#1F2D3D ;
+  color:#FFFFFF;
+}
+.horizontal-separator{
+width:100%;
+  height:1px;
+  background-color:rgba(80, 85, 107, 0.15000000596046448);
+  margin-top:15px;
+}
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>cisco_fabric_interconnect_details</id>
+        <internal>false</internal>
+        <link/>
+        <name>cisco_fabric_interconnect_details</name>
+        <option_schema>[{"name":"type","section":"other","label":"Type","type":"string"}]</option_schema>
+        <public>false</public>
+        <roles>x_caci_cisco_inter.intersight_user</roles>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var table=$sp.getParameter('table')
+	
+	var daoScript = new Cisco_DAOScript();
+	var sn_logger=new Cisco_SNLogger();
+	
+	var sys_id=$sp.getParameter('sys_id')
+	
+	//gliderecord on table in the url
+	try{
+		sn_logger.debug('cisco_fabric_interconnect_details : Inside Gliderecord to fetch records');
+	var fabricsGR=new GlideRecordSecure(table);
+	fabricsGR.get(sys_id);
+	data.fabric_int_name=(fabricsGR.name)?fabricsGR.name+'':'-';
+	data.fabrics_detail_json={};
+	var details=[];
+	var properties=[];
+	var tags={};
+	if(options.type=="Details"){
+		sn_logger.debug('cisco_fabric_interconnect_details : Inside Gliderecord to fetch details');
+		details=[{
+			"key":"Name",
+			"value":(fabricsGR.name)?fabricsGR.name+'':'-'
+		},
+		{
+			"key":"Health",
+			"value": daoScript.getHealth(fabricsGR.sys_id)+''
+		},
+		{
+			"key":"Peer FI",
+			"value": daoScript.getAndUpdatePeerFI(fabricsGR.device_moid, fabricsGR.sys_id)+''
+		},
+		{
+			"key":"Management IP",
+			"value":(fabricsGR.out_of_band_ip_address)?fabricsGR.out_of_band_ip_address+'':'-'
+		},
+		{
+			"key":"Model",
+			"value":(fabricsGR.model_number)?fabricsGR.model_number.getDisplayValue():'-'
+		},
+		{
+			"key":"Serial",
+			"value":(fabricsGR.serial)?fabricsGR.serial+'':'-'
+		},
+		{
+			"key":"Expansion Modules",
+			"value":(fabricsGR.expansion_modules)?fabricsGR.expansion_modules+'':'-'
+		},
+		{
+			"key":"Firmware Version",
+			"value":(fabricsGR.firmware)?fabricsGR.firmware+'':'-'
+		},
+		{
+			"key":"Used Ports",
+			"value":(fabricsGR.ether_ports_configured)?fabricsGR.ether_ports_configured+'':'-'
+		},
+		{
+			"key":"Available Ports",
+			"value":(fabricsGR.available_ports)?fabricsGR.available_ports+'':'-'
+		}];
+	}
+	
+	else if(options.type=="Tags"){
+		sn_logger.debug('cisco_fabric_interconnect_details : Inside Gliderecord to fetch tags');
+		tags=fabricsGR.tags;
+	}
+	
+	data.fabrics_detail_json.details=details;
+	data.fabrics_detail_json.tags=tags;
+	}catch(e){
+		sn_logger.error('cisco_fabric_interconnect : '+e);
+	}
+
+	var widgetParams = {
+		table: daoScript.table.ciscoServers,
+		fields:"name,health,mgmt_ip_address,model_number,serial_number",
+		
+		window_size: 10,//data.window_size,
+		view: 'sp',
+		show_breadcrumbs: true
+	};
+	data.dataTableWidget = $sp.getWidget('cisco_dataTable', widgetParams);
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-07 10:41:52</sys_created_on>
+        <sys_id>51c7fc65dbc4b300a4e47befbf96193f</sys_id>
+        <sys_mod_count>88</sys_mod_count>
+        <sys_name>cisco_fabric_interconnect_details</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sp_widget_51c7fc65dbc4b300a4e47befbf96193f</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-26 17:06:56</sys_updated_on>
+        <template><![CDATA[<div class="main-container">
+  <div class="panel panel-default">
+  <div class="panel-heading details-header">
+    <h3 class="panel-title">{{c.options.type}}</h3>
+  </div>
+  <div class="panel-body" ng-class="{'servers-container':c.options.type=='Servers','details-container':c.options.type=='Details'}">
+   <div ng-if="c.options.type=='Servers'">
+     <sp-widget ng-if="data.dataTableWidget" widget="data.dataTableWidget"></sp-widget>
+    </div>
+    
+    <ul ng-class="{'list-inline':c.options.type=='Tags'}">
+      <li ng-if="c.options.type=='Details'" ng-repeat="item in c.data.fabrics_detail_json.details" class="row list-item">
+        <div class="key col-md-6">{{item.key}}</div>
+        
+        <div class="value col-md-6" ng-if="item.key!='Health'">{{item.value}}</div>
+        
+        <div ng-if="item.key=='Health' && item.value=='Critical'" class="value col-md-6"> <span class="health-status-critical">Critical &nbsp <i style="font-size:12px" class="glyphicon glyphicon-remove"></i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Warning'" class="value col-md-6"> <span class="health-status-warning">Warning &nbsp <i style="font-size:12px" class="fa">&#xf071;</i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Healthy'" class="value col-md-6"><span class="health-status-healthy">Healthy &nbsp <i style="font-size:12px" class="fa">&#xf00c;</i></span></div>
+        <div ng-if="item.key=='Health' && item.value=='Info'" class="value col-md-6"><span class="health-status-info">Info &nbsp <i style="font-size:12px" class="fa">&#xf00c;</i></span></div>
+        <br/>
+        <div ng-if="item.key=='Health'||item.key=='Firmware Version'" class="horizontal-separator">
+        </div>
+      </li>
+      
+     
+
+    
+      
+      
+      <div ng-init="render = isempty(c.data.fabrics_detail_json.tags)" ng-if="c.options.type=='Tags' " class="list-inline">
+      <li class="tags-list" ng-if="render" ng-repeat="(key, value) in c.data.fabrics_detail_json.tags">
+        <div class="tag">
+          <span>{{key}}</span>
+        <span>: {{value}}</span>
+        </div>
+      </li> 
+     	<h5 ng-if="!render" style="text-align:center">
+        No Tags Found
+     </h5>
+    </div>
+      
+   </ul>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="sys_import_set_row" label="Cisco Alarms Dump" max_length="40" name="x_caci_cisco_inter_cisco_alarms_dump" sizeclass="0" type="collection">
+        <element label="accountmoid" max_length="255" name="accountmoid" type="string"/>
+        <element label="affectedmoid" max_length="255" name="affectedmoid" type="string"/>
+        <element label="affectedmotype" max_length="255" name="affectedmotype" type="string"/>
+        <element label="affectedobject" max_length="255" name="affectedobject" type="string"/>
+        <element label="ancestormoid" max_length="255" name="ancestormoid" type="string"/>
+        <element label="ancestormotype" max_length="255" name="ancestormotype" type="string"/>
+        <element label="ancestors" max_length="500" name="ancestors" type="string"/>
+        <element label="code" max_length="50" name="code" type="string"/>
+        <element label="createtime" max_length="255" name="createtime" type="string"/>
+        <element label="creationtime" max_length="100" name="creationtime" type="string"/>
+        <element label="description" max_length="500" name="description" type="string"/>
+        <element label="domaingroupmoid" max_length="255" name="domaingroupmoid" type="string"/>
+        <element label="lasttransitiontime" max_length="100" name="lasttransitiontime" type="string"/>
+        <element label="modtime" max_length="255" name="modtime" type="string"/>
+        <element label="moid" max_length="255" name="moid" type="string"/>
+        <element label="msaffectedobject" max_length="100" name="msaffectedobject" type="string"/>
+        <element label="name" max_length="100" name="name" type="string"/>
+        <element label="objecttype" max_length="255" name="objecttype" type="string"/>
+        <element label="origseverity" max_length="100" name="origseverity" type="string"/>
+        <element label="owners" max_length="500" name="owners" type="string"/>
+        <element label="parent" max_length="500" name="parent" type="string"/>
+        <element label="registereddevice" max_length="1000" name="registereddevice" type="string"/>
+        <element label="severity" max_length="100" name="severity" type="string"/>
+        <element label="sharedscope" max_length="255" name="sharedscope" type="string"/>
+        <element label="tags" max_length="255" name="tags" type="string"/>
+    </element>
+</database>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <entered_time/>
+        <name>DeleteProcessQueueData</name>
+        <offset/>
+        <offset_type/>
+        <run_as/>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-02 00:00:00</run_period>
+        <run_start>2019-02-24 16:08:17</run_start>
+        <run_time>1969-12-31 19:30:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[var snLogger = new Cisco_SNLogger();
+//clears all the import queue stale data
+try{
+snLogger.debug('Inside Cisco_DeleteProcessQueueData Schedule Job for running it periodically on every 3 hours');
+var daoScrpt = new Cisco_DAOScript();
+daoScrpt.deleteProcessQueue();
+}catch(e){
+	snLogger.error('Exception caught Inside Cisco_DeleteProcessQueueData Schedule Job');
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-24 16:32:22</sys_created_on>
+        <sys_id>bbf8d5cedbbb630062a3d450cf961991</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>DeleteProcessQueueData</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sysauto_script_bbf8d5cedbbb630062a3d450cf961991</sys_update_name>
+        <sys_updated_by>bkshirsa</sys_updated_by>
+        <sys_updated_on>2019-06-19 13:51:44</sys_updated_on>
+        <time_zone/>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

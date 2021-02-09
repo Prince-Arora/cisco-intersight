@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format/>
+        <height/>
+        <image>281422b4dbcc3300a4e47befbf9619fd</image>
+        <name>servers.svg</name>
+        <size_bytes>3478</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-02-18 10:47:15</sys_created_on>
+        <sys_id>b8f519ccdbb32300a4e47befbf961984</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>servers.svg</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>db_image_b8f519ccdbb32300a4e47befbf961984</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-11 15:40:20</sys_updated_on>
+        <thumbnail/>
+        <width/>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color/>
+        <chunk_size_bytes>734003</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/svg+xml</content_type>
+        <file_name>image</file_name>
+        <hash/>
+        <image_height/>
+        <image_width/>
+        <size_bytes>3478</size_bytes>
+        <size_compressed>865</size_compressed>
+        <state/>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-05 10:39:35</sys_created_on>
+        <sys_id>281422b4dbcc3300a4e47befbf9619fd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>gurjotjoshi</sys_updated_by>
+        <sys_updated_on>2019-03-05 10:39:35</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>b8f519ccdbb32300a4e47befbf961984</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="281422b4dbcc3300a4e47befbf9619fd">281422b4dbcc3300a4e47befbf9619fd</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-05 10:39:35</sys_created_on>
+        <sys_id>681422b4dbcc3300a4e47befbf9619fd</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>bZfdTtwwEIXveQorvWkluhvHHo9TsVw0t9sX4A4Jyq60LRWsun38jh0nzIEByRknmZ/vcByJm9e/T+7fr9Pv1113OJ//fNtuL5fL5hI2zy9P26Hv+6280bnL8eF82HU+de7weHw6nCWOnft7fLx8f/6363rXO5+c3Lu9cu7mz/354H4eT6dd98mH8tu5h133g659dns/rpfo9rSs2d25H3EjUSgP52CSgDn5OMSyHXpZN8MQMnFqO3L7EmQJpjloCU7njm4uObp9nK9TXAqFso06M8719nFuMEXdVucF1yaW2VOJqKQZ0ZRa8cDzjXrhVlI2ye3VOpV1M7RxdK5UdLVqWutjJJ3e5qtvQ6naQ61T0oPoXFo6lUD48kplRFN+xzfqsmPtp9Zp1EPld3x5pTIi6YR8GUrVHmqdsh4kv+PLik+ifrblfEnFlnWRG82b1KxJ4EwqVqS19LxrvuwXX/amL33zpW++9OhLX6zYa1/2sy9ptqVqqtLIzbM2U/LiDwi0I7kakheZgmxycWJbxI25KRxYuzE3i+SlMATaifVNqFKKr4u4UHVXedw68JsHebEDBNqAXP2nCo6lz7qI+dQgGXHyQvEh0Marb0KVUnxdxHSqe0ac/Ibjh418Y3tPRZo4ys9QvlDqtrxYQs5iDLgtJZkCOe9lfiY/+Gsum/a6bCbZDYPsA9VHkKQL72Wr2k91K6IMMdX6S5FR16/vra3lkUZZk02+Ah5t8GiDRws8aPAA4EGDB0hC8IDgQc8eNHgA8KDBowVu8hXwZIMnGzxZ4KTBCcBJgxMkITghOOnZSYMTgJMGTxa4yVfAsw2ebfBsgbMGZwBnDc6QhOCM4KxnZw3OAM4aPFvgJh+ecRFnfjLAGX/TGM54/Tt8OOSe9Cn0BMe8PsREXb0cdDXDNG+Nk+7hU+IZznp5CEzGaVdd8LSDBNGWIJoSBJAgoAQBJAiYiBIElCAAQQAJAkoQQIJoSmCS4rkHCZItQTIlIJCAUAICCQgTUQJCCQgICCQglIBAgmRKYJLiFwAkyLYE2ZSAQQJGCRgkYExECRglYCBgkIBRAgYJsimBSXrXufPL/e/Xn88vv3ZdDU/358fPX6P7Sl+67e3VTflv6/bqP8UbeSCWDQAA</data>
+        <length>1140</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="281422b4dbcc3300a4e47befbf9619fd">281422b4dbcc3300a4e47befbf9619fd</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-05 10:39:35</sys_created_on>
+        <sys_id>e81422b4dbcc3300a4e47befbf9619fd</sys_id>
+    </sys_attachment_doc>
+</record_update>

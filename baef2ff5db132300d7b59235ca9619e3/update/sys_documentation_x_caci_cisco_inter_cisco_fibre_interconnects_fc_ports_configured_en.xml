@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="fc_ports_configured" label="FC Ports Configured" language="en" table="x_caci_cisco_inter_cisco_fibre_interconnects">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>fc_ports_configured</element>
+            <help/>
+            <hint/>
+            <label>FC Ports Configured</label>
+            <language>en</language>
+            <name>x_caci_cisco_inter_cisco_fibre_interconnects</name>
+            <plural>FC Ports Configured</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>Prince Arora</sys_created_by>
+            <sys_created_on>2019-02-19 13:03:53</sys_created_on>
+            <sys_id>b1de7e1cdbf32300b6237a6139961978</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>FC Ports Configured</sys_name>
+            <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+            <sys_update_name>sys_documentation_x_caci_cisco_inter_cisco_fibre_interconnects_fc_ports_configured_en</sys_update_name>
+            <sys_updated_by>Prince Arora</sys_updated_by>
+            <sys_updated_on>2019-02-19 13:03:53</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

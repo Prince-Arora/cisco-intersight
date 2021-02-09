@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Intersight Authentication" max_length="40" name="x_caci_cisco_inter_intersight_authentication" sizeclass="1" type="collection">
+        <element active="false" label="Access Link" max_length="1000" name="access_link" type="string"/>
+        <element active="false" label="Account ID" max_length="40" name="account_id" type="string"/>
+        <element display="true" hint="Alias name." label="Name" mandatory="true" max_length="255" name="account_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" hint="Check this for advance filter condition." label="Advanced" max_length="40" name="advanced" type="boolean"/>
+        <element hint="API Key-ID of the Intersight Account." label="API Key ID" mandatory="true" max_length="1000" name="api_key_id" type="string"/>
+        <element attributes="base_start=true,edge_encryption_enabled=true" default="x_caci_cisco_inter_cisco_alarms" label="Table" max_length="80" name="collection" type="table_name"/>
+        <element attributes="edge_encryption_enabled=true" dependent="collection" dependent_on_field="collection" hint="Sets the advance filter  condition for which incidents needs to be created." label="Alarm Conditions" max_length="4000" name="conditions" type="conditions" use_dependent_field="true"/>
+        <element attributes="edge_encryption_enabled=true" hint="Check it create Incident for the existing Alarms." label="Create Incident for existing Alarms" max_length="255" name="create_incidents_based_on_condition" type="boolean"/>
+        <element hint="Intersight hostname. Fill it without http:// or https://." label="Hostname" mandatory="true" max_length="255" name="host_name" type="string"/>
+        <element active="false" attributes="edge_encryption_enabled=true" default="true" label="Imports Servers" max_length="40" name="imports_servers" type="boolean"/>
+        <element active="false" attributes="edge_encryption_enabled=true" default="true" label="Import Alarms" max_length="40" name="import_alarms" type="boolean"/>
+        <element active="false" attributes="edge_encryption_enabled=true" default="true" label="Import Fabric Interconnects" max_length="40" name="import_fabric_interconnects" type="boolean"/>
+        <element active="false" attributes="edge_encryption_enabled=true" default="true" label="Import Hyperflex Clusters" max_length="40" name="import_hyperflex_clusters" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" hint="Select the group that handles the Incidents created." label="Incident Assignment Group" mandatory="true" max_length="32" name="incident_assignment_group" reference="sys_user_group" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" hint="User against whom the Incidents would be raised." label="Incident Caller Name" mandatory="true" max_length="32" name="incident_caller_name" reference="sys_user" type="reference"/>
+        <element attributes="no_sort=true,slushbucket_ref_no_expand=true,edge_encryption_enabled=true" choice="3" default="Critical" hint="Select the severity of alarms for which incidents needs to be created." label="Alarm Severity" max_length="4000" name="incident_severity" type="glide_list">
+            <choice>
+                <element inactive_on_update="false" label="Critical" sequence="0" value="Critical"/>
+                <element inactive_on_update="false" label="Warning" sequence="1" value="Warning"/>
+                <element inactive_on_update="false" label="Info" sequence="2" value="Info"/>
+            </choice>
+        </element>
+        <element choice="3" default="0" hint="Describes the log-level of the application." label="Log Level" max_length="40" name="log_levels" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Error" sequence="0" value="0"/>
+                <element inactive_on_update="false" label="Warning" sequence="1" value="1"/>
+                <element inactive_on_update="false" label="Info" sequence="2" value="2"/>
+                <element inactive_on_update="false" label="Debug" sequence="3" value="3"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" hint="Name of the mid-server" label="Mid Server" max_length="32" name="mid_server" reference="ecc_agent" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" hint="For on-premises calls" label="On-Premises" max_length="40" name="on_premises" type="boolean"/>
+        <element active="false" attributes="edge_encryption_enabled=true" label="Script" max_length="8000" name="script" type="script_plain"/>
+        <element hint="Secret key of the Intersight account." label="Secret Key" mandatory="true" max_length="1000" name="secret_key" type="string"/>
+        <element default="intersight-snow-feedback@cisco.com" hint="Support URL for end users." label="Support URL" max_length="1024" name="support_url" type="url"/>
+        <element label="URL" max_length="40" name="url" read_only="true" type="url"/>
+        <element default="NO" label="Validated" max_length="100" name="validated" type="string"/>
+        <index name="index">
+            <element name="mid_server"/>
+        </index>
+        <index name="index2">
+            <element name="incident_assignment_group"/>
+        </index>
+        <index name="index3">
+            <element name="incident_caller_name"/>
+        </index>
+    </element>
+</database>

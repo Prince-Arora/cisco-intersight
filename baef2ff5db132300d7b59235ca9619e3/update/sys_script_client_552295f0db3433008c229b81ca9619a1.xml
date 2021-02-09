@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description>To Set Default value for Alams severity</description>
+        <field>api_key_id</field>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>Default value for Alams severity</name>
+        <order/>
+        <script><![CDATA[function onLoad() {
+  if(g_form.getValue('incident_severity') == '' &&  g_form.getValue('advanced') == 'false')  {
+		  g_form.setValue('incident_severity','Critical');
+	  }
+   
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-11 11:29:37</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>552295f0db3433008c229b81ca9619a1</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Default value for Alams severity</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_client_552295f0db3433008c229b81ca9619a1</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-11 12:09:08</sys_updated_on>
+        <table>x_caci_cisco_inter_intersight_authentication</table>
+        <type>onLoad</type>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>

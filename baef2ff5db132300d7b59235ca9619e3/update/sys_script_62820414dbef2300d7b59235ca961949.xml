@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_caci_cisco_inter_inventory_queue</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_caci_cisco_inter_inventory_queue">state=ready^EQ<item display_value="Ready" endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="ready"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Intersight Queue Post Insert BR</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	this.logger = new Cisco_SNLogger();
+	
+	try{
+		var topic = current.topic+'';
+		current.state = "processing";
+		current.update();
+
+		var call="";
+		var callFunction ="";
+		
+		switch(topic){
+
+			case "Start Import":                        call = new Cisco_ImportInventory();
+														callFunction = call.importDeviceRegistrationData( current);
+				
+														call = new Cisco_DAOScript();
+												
+														call.insertIntoQueue('Start Inventory Import', '', 'Server', current.intersight+'');
+														call.insertIntoQueue('Start Inventory Import', '', 'Fabric Interconnects', current.intersight+'');
+														call.insertIntoQueue('Start Inventory Import', '', 'HX clusters', current.intersight+'');
+													  //  call.insertIntoQueue('Start Alarms Import', '', 'Alarms', current.intersight+'');
+				
+														current.state = "completed";
+														break;	
+			
+			case "Start Inventory Import":              call = new Cisco_ImportInventory();
+														callFunction = call.startInventoryImport( current);
+														current.state = "completed";
+														break;	
+			
+			case "Process Inventory Endpoint":          call = new Cisco_ImportInventory();
+														callFunction = call.processInventoryEndpoint( current);
+														current.state = "completed";
+														break;
+				
+			case "Process Inventory Response":          call = new Cisco_ImportInventory();
+														callFunction = call.processInventoryResponse( current);
+														current.state = "completed";
+														break;	
+				
+			case "Start Alarms Import":                 call = new Cisco_ImportInventory();
+														callFunction = call.startInventoryImport( current);
+														current.state = "completed";
+														break;
+		}
+
+		this.logger.info("Cisco Import Queues Post Insert BR ran sucessfully");
+		
+	}catch(e) {
+		
+		current.state = "error";
+		this.logger.error("Exception caught inside Cisco Import Queues Post Insert BR : "+e);
+	}finally{
+		
+		current.update();
+	}
+		
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-06 13:06:10</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>62820414dbef2300d7b59235ca961949</sys_id>
+        <sys_mod_count>46</sys_mod_count>
+        <sys_name>Intersight Queue Post Insert BR</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_62820414dbef2300d7b59235ca961949</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-25 09:01:31</sys_updated_on>
+        <template/>
+        <when>async</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=62820414dbef2300d7b59235ca961949"/>
+</record_update>

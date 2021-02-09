@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_embedded_tour_guide">
+    <sys_embedded_tour_guide action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <additional_parameters/>
+        <autolaunch_order>0</autolaunch_order>
+        <context>intersight?id=cisco_homepage&amp;gtd_portal_title=Cisco Intersight SNOW Portal&amp;gtd_page_title=Dashboard</context>
+        <description>Tour guide for cisco intersight ITSM plugin.</description>
+        <has_concl>false</has_concl>
+        <has_intro>true</has_intro>
+        <name>Cisco Intersight ITSM Plugin Guided Tour</name>
+        <options/>
+        <roles>x_caci_cisco_inter.intersight_admin,x_caci_cisco_inter.intersight_user</roles>
+        <sp_page display_value="cisco_homepage">5dbc90c8db332300a4e47befbf9619ae</sp_page>
+        <sp_portal display_value="Cisco Intersight SNOW Portal">96b0c536db632300a4e47befbf96190c</sp_portal>
+        <status>published</status>
+        <sys_class_name>sys_embedded_tour_guide</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-13 11:13:20</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>7c88bfd7dbc8b3005070d740cf9619b5</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>Cisco Intersight ITSM Plugin Guided Tour</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_embedded_tour_guide_7c88bfd7dbc8b3005070d740cf9619b5</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-06-01 10:14:40</sys_updated_on>
+        <tour_id>TOURCISCOITSM</tour_id>
+        <type>service_portal</type>
+    </sys_embedded_tour_guide>
+</record_update>

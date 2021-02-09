@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Cisco Alarms" max_length="40" name="x_caci_cisco_inter_cisco_alarms" sizeclass="0" type="collection">
+        <element attributes="edge_encryption_enabled=true" label="CI Record" max_length="32" name="ci_record" reference="cmdb_ci" type="reference"/>
+        <element label="Code" max_length="100" name="code" type="string"/>
+        <element label="Component" max_length="100" name="component" type="string"/>
+        <element label="Date/Time" max_length="100" name="date_time" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Deletion" max_length="40" name="deletion" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="incident" max_length="32" name="incident" reference="incident" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Incident Rasied" max_length="255" name="incident_rasied" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Incident Not Raised" value="not_raised"/>
+                <element inactive_on_update="false" label="Incident Raised" value="raised"/>
+            </choice>
+        </element>
+        <element display="true" label="Message" max_length="500" name="message" type="string"/>
+        <element label="Moid" max_length="100" name="moid" type="string"/>
+        <element label="Severity" max_length="100" name="severity" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Source Name" max_length="100" name="source_name" reference="x_caci_cisco_inter_cisco_deviceregistration" type="reference"/>
+        <element active="false" label="Source Type" max_length="100" name="source_type" type="string"/>
+        <index name="index">
+            <element name="ci_record"/>
+        </index>
+        <index name="index2">
+            <element name="incident"/>
+        </index>
+        <index name="index3">
+            <element name="source_name"/>
+        </index>
+    </element>
+</database>

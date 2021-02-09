@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format/>
+        <height/>
+        <image>12bf353adbc87700a4e47befbf961994</image>
+        <name>alarms-active.svg</name>
+        <size_bytes>3014</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:08:31</sys_created_on>
+        <sys_id>eaaf753adbc87700a4e47befbf9619fa</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>alarms-active.svg</sys_name>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>db_image_eaaf753adbc87700a4e47befbf9619fa</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-11 15:40:20</sys_updated_on>
+        <thumbnail/>
+        <width/>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color/>
+        <chunk_size_bytes>734003</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/svg+xml</content_type>
+        <file_name>image</file_name>
+        <hash/>
+        <image_height/>
+        <image_width/>
+        <size_bytes>3014</size_bytes>
+        <size_compressed>1430</size_compressed>
+        <state/>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:08:38</sys_created_on>
+        <sys_id>12bf353adbc87700a4e47befbf961994</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>gurjotjoshi</sys_updated_by>
+        <sys_updated_on>2019-03-11 13:08:38</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>eaaf753adbc87700a4e47befbf9619fa</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="12bf353adbc87700a4e47befbf961994">12bf353adbc87700a4e47befbf961994</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:08:38</sys_created_on>
+        <sys_id>52bf353adbc87700a4e47befbf961994</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>bVbLjlNJDN3zFVdhMyOF22W7/BrRLKYlVsMPsEPi0S01D0FE8/lz7BumbxhWSU5cLj+Oj+v5t+8flh8f7z99uz7cnk5f/rq6enh4WB9k/fz1wxWPMa5gcVge7t6ebq8PJIfl9t3dh9sTvs/D8v3u3cPfn39cH8YyFpIF2Isny/L8y5vT7fL+7v7++vD05cuXh+Xt9eFVriai7sxHslV8sthcbi5hEnaZvuQalJOH2ZF0TbHUiIXGOmaYD96j/9BceeBk5h6+ATxlqKdc+JirkU3m2N93if4X3B72NViccyLTVceYMo+UC/FKrPXtBuH5TK2Yc9nn9Xj090V4vbz66SbqY85Z7niNDNx+AdfluGTELL+4zN0KdBEUzMptEClN1GWsSoYKyA7tKBF9ku0d0CpKiOzyrv8FVZHaasnJ6vu74El9+JR9BDdlqkI+5g61rfCGyHLp/vJ0MiPYH1HxUB2pusCITUOzQHVG1AVKFC+tUXa1qX2RpAXHbA+sMcfgpa4noykwFjAgmVOAuosNG40G8mazcpGTxAd5wcZMPHLxdZiiTbONJYeoAaSKWIcVSJMzEANQzUHmVOiw6axUtp4pYwDlFREMIwaKz3CkWqjLEDQBHnAiJkhR6KShMqNskRvN9EKHs6BYQEXCNYuFBA9EGVkuwHNPNi94egQCKmOAbpyFskyhzg3MRv24bRHhVgjAKCtQZDeK6QO5wlgRj1HNHsYQFAiRQlmEIvWYCIJR4Oqjo37ihDYdUcAAyYy0yF/ZkcVRf3JLtyHD8DpxwegZYorzSfBMkgpFMeGD+poBH8o4CVgwI2HnmAaxtLGDrJFb/Oxh7QL8GFq2lazHRCfLRSCFRAJdGUcjvI2jbHSrIsoYjSaNiUnrkrMRRXtIZTs3eIBARpttYrLs3EokDbZj4AbYwp5b22ciTLgoliVi0I0jgRZKG+O+wU29gbTrvkID/I0GiyzM7YECoJ9pimnIvk5GQBdso3QpjxaKBqOGsfEfVdVsF1oZbfSFB3SvbMMCnqnnCu1P40br7yIZ0FCoaKVROoHYnHticZlALGMtCcFYcxVMfwKKgHEzaZ8rxJBjCtWZUhNIlPBONn6rO7/o0V79q3qQHrtYCpU7BoUmFarQUVX+BX2M6wJGZ8G1bouADkPbMdoDfWgU7Bo0t1zBLlStXXAQ48cGg5QbN0rjfHadJKZoNOcmaGBtKtgjmKqml+Fq1XYM+pGWXhtmF2K0iRV4JiFdIsbISDbK6BHs2wXEU4OaBhAe8LpdQNUIOtdMgpLYBjJpZNM2oILhG8fJsRxGw1Al/OpBIyxd0mYzlRpFuwBBaURrTQiqMqRdlHxAswqGrEPIeiprPnNDpUR8bi4GJBPjDhQ5QJlrVtHH6TPOwoTGlAftocQeKBDxQFej0IASEWQEgoEtgofA5qFOlWCAYlF1rTGZ1XPxkCP+94la12PmLFCPSK1OHBmQ8z0ceGaoOVSinUKykT5QUe7x7AicQCn0IipJcpBiCxftgrIARRm4Fwoy84BmMlAsxpb7liwoeHK7wMhPtPxcM2hMKIwpsb2myVZf44mXBVCrV9RW3yLanFIuqJ5XqrM7ByJVGqPEL/zcYziLSmMg1qppE6L6hvUFB7WDPTZpUtHslVSbB9WRXouZ0PpaEamUBJFoaZo4VbJZbyJEzMbNYJAdRYEx9hEeLdnrHSk7bGpRoRV4nug2GviyrUt0VSqlniOsHgzmUsLLmKloFYJ6oYbUKBSUt+lCdUDnfjdAa8/swTCjKjzr3QC+IOJKGihYTTN+QR/fLBewQYRRzlr7iLMIsJef/Stp/4D9rYS9Piynr28+fXv/+evH60N/vX9zevfHM1ue6Z+HqxdPntfr/MWTfwHMLfcvxgsAAA==</data>
+        <length>1896</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="12bf353adbc87700a4e47befbf961994">12bf353adbc87700a4e47befbf961994</sys_attachment>
+        <sys_created_by>gurjotjoshi</sys_created_by>
+        <sys_created_on>2019-03-11 13:08:38</sys_created_on>
+        <sys_id>d2bf353adbc87700a4e47befbf961994</sys_id>
+    </sys_attachment_doc>
+</record_update>

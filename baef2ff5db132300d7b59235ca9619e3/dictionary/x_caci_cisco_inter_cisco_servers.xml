@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="cmdb_ci_ucs_equipment" label="Cisco Servers" max_length="40" name="x_caci_cisco_inter_cisco_servers" sizeclass="0" type="collection">
+        <element label="Account Moid" max_length="40" name="account_moid" type="string"/>
+        <element label="Admin Power State" max_length="40" name="admin_power_state" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Available Memory" max_length="20" name="available_memory" type="decimal"/>
+        <element label="Chassis Id" max_length="40" name="chassis_id" type="string"/>
+        <element label="CPU Capacity (GHz)" max_length="40" name="cpu_capacity" type="string"/>
+        <element label="Create Time" max_length="100" name="create_time" type="string"/>
+        <element label="Device MoId" max_length="40" name="device_moid" type="string"/>
+        <element label="Domain Group Moid" max_length="40" name="domain_group_moid" type="string"/>
+        <element label="Firmware" max_length="40" name="firmware" type="string"/>
+        <element label="Health" max_length="40" name="health" type="string"/>
+        <element label="CPU Capacity" max_length="20" name="memory_speed" type="string"/>
+        <element label="Management IP" max_length="255" name="mgmt_ip_address" type="string"/>
+        <element label="Moid" max_length="40" name="moid" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Adapters" max_length="40" name="numadaptors" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="CPU Cores Enabled" max_length="40" name="number_of_cpu_cores_enabled" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="CPU Cores" max_length="40" name="numcpucores" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="CPUs" max_length="40" name="numcpus" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="NIC Interfaces" max_length="40" name="numethhostinterfaces" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="HBA Interfaces" max_length="40" name="numfchostinterfaces" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Threads" max_length="40" name="numthreads" type="integer"/>
+        <element label="Operability" max_length="40" name="operability" type="string"/>
+        <element label="Oper Power State" max_length="40" name="oper_power_state" type="string"/>
+        <element label="Oper State" max_length="40" name="oper_state" type="string"/>
+        <element label="Platform Type" max_length="40" name="platformtype" type="string"/>
+        <element label="Power" max_length="255" name="power" type="string"/>
+        <element label="Presence" max_length="40" name="presence" type="string"/>
+        <element label="Revision" max_length="100" name="revision" type="string"/>
+        <element label="Scaled Mode" max_length="40" name="scaledmode" type="string"/>
+        <element label="ID" max_length="40" name="serverid" type="string"/>
+        <element label="Slot Id" max_length="40" name="slotid" type="string"/>
+        <element label="Source Object Type" max_length="100" name="sourceobjecttype" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Tags" max_length="4000" name="tags" type="simple_name_values"/>
+        <element attributes="edge_encryption_enabled=true" label="Memory Capacity (GB)" max_length="20" name="totalmemory" type="decimal"/>
+        <element label="User Label" max_length="500" name="user_label" type="string"/>
+        <element label="Uuid" max_length="40" name="uuid" type="string"/>
+        <element label="Vendor" max_length="40" name="vendors" type="string"/>
+    </element>
+</database>

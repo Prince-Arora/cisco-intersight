@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_caci_cisco_inter_intersight_authentication</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Update application system properties</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	
+	gs.setProperty('x_caci_cisco_inter.intersight_log_verbosity', current.log_levels);
+	gs.setProperty('x_caci_cisco_inter.cisco.intersight.support', current.support_url);
+	gs.setProperty('x_caci_cisco_inter.Cisco_Incident_Handler', current.incident_assignment_group);
+	gs.setProperty('x_caci_cisco_inter.IncidentCallerName', current.incident_caller_name);
+		
+	if(current.advanced && current.conditions!=''){
+		gs.setProperty('x_caci_cisco_inter.alarm.raise.incident.conditions', current.conditions);
+	}else if(current.advanced+''=='false' && current.incident_severity){
+		gs.setProperty('x_caci_cisco_inter.alarm.raise.incident.conditions', "severityIN"+current.incident_severity);
+	}else{
+		gs.setProperty('x_caci_cisco_inter.alarm.raise.incident.conditions', "severityIN");
+	}
+	
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>girishgyani</sys_created_by>
+        <sys_created_on>2019-02-14 07:14:30</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>10ae7b26db23a30062a3d450cf961918</sys_id>
+        <sys_mod_count>23</sys_mod_count>
+        <sys_name>Update application system properties</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Cisco Intersight ITSM Plugin" source="x_caci_cisco_inter">baef2ff5db132300d7b59235ca9619e3</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Cisco Intersight ITSM Plugin">baef2ff5db132300d7b59235ca9619e3</sys_scope>
+        <sys_update_name>sys_script_10ae7b26db23a30062a3d450cf961918</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-11 10:35:55</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=10ae7b26db23a30062a3d450cf961918"/>
+</record_update>
